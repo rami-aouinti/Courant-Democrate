@@ -305,7 +305,7 @@ migrate-cron-jobs: ## Creates cron job tasks (cleanup logs)
 	@make exec cmd="php bin/console scheduler:cleanup-logs"
 
 fixtures: ## Runs all fixtures for test database without --append option (tables will be dropped and recreated)
-	@make exec cmd="php bin/console doctrine:fixtures:load --env=test"
+	@make exec cmd="php bin/console doctrine:fixtures:load"
 
 create-roles-groups: ## Creates roles and groups
 	@make exec cmd="php bin/console user:create-roles-groups"

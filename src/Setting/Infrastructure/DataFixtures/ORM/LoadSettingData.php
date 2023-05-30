@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\User\Infrastructure\DataFixtures\ORM;
+namespace App\Setting\Infrastructure\DataFixtures\ORM;
 
 use App\General\Domain\Rest\UuidHelper;
 use App\Role\Application\Security\Interfaces\RolesServiceInterface;
-use App\Setting\Domain\Entity\Setting;
 use App\Tests\Utils\PhpUnitUtil;
 use App\User\Domain\Entity\User;
 use App\User\Domain\Entity\UserGroup;
@@ -26,7 +25,7 @@ use function array_map;
  * @psalm-suppress PropertyNotSetInConstructor
  */
 #[AutoconfigureTag('doctrine.fixture.orm')]
-final class LoadUserData extends Fixture implements OrderedFixtureInterface
+final class LoadSettingData extends Fixture implements OrderedFixtureInterface
 {
     /**
      * @var array<string, string>
@@ -105,19 +104,7 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface
             $entity
         );
 
-        $settingEntity = new Setting();
-        $settingEntity->setSiteName("Courant Democrate");
-        $settingEntity->setDrawer(true);
-        $settingEntity->setSidebarColor("warning");
-        $settingEntity->setSidebarTheme("transparent");
-        $settingEntity->setUser($entity);
-        $settingEntity->setCreatedBy($entity);
-        $settingEntity->setUpdatedBy($entity);
-
-        $entity->setSetting($settingEntity);
-
         // Persist entity
-        $manager->persist($settingEntity);
         $manager->persist($entity);
         // Create reference for later usage
         $this->addReference('User-' . $entity->getUsername(), $entity);

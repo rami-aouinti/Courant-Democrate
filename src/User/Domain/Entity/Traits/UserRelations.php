@@ -7,11 +7,13 @@ namespace App\User\Domain\Entity\Traits;
 use App\Log\Domain\Entity\LogLogin;
 use App\Log\Domain\Entity\LogLoginFailure;
 use App\Log\Domain\Entity\LogRequest;
+use App\Setting\Domain\Entity\Setting;
 use App\User\Domain\Entity\User;
 use App\User\Domain\Entity\UserGroup;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OneToOne;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -69,6 +71,14 @@ trait UserRelations
         'User.logsLoginFailure',
     ])]
     protected Collection | ArrayCollection $logsLoginFailure;
+
+
+    #[OneToOne(mappedBy: 'user', targetEntity: Setting::class)]
+    #[Groups([
+        'User.setting',
+        User::SET_USER_PROFILE,
+    ])]
+    protected Setting|null $setting;
 
     /**
      * Getter for roles.
@@ -166,5 +176,21 @@ trait UserRelations
         $this->userGroups->clear();
 
         return $this;
+    }
+
+    /**
+     * @return Setting|null
+     */
+    public function getSetting(): ?Setting
+    {
+        return $this->setting;
+    }
+
+    /**
+     * @param Setting|null $setting
+     */
+    public function setSetting(?Setting $setting): void
+    {
+        $this->setting = $setting;
     }
 }

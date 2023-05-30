@@ -304,6 +304,9 @@ migrate: ## Runs all migrations for main/test databases
 migrate-cron-jobs: ## Creates cron job tasks (cleanup logs)
 	@make exec cmd="php bin/console scheduler:cleanup-logs"
 
+prepare: ## Creates cron job tasks (cleanup logs)
+	@make exec cmd="composer prepare"
+
 fixtures: ## Runs all fixtures for test database without --append option (tables will be dropped and recreated)
 	@make exec cmd="php bin/console doctrine:fixtures:load"
 

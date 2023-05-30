@@ -33,3 +33,12 @@ user-controllers:
     prefix: /api
     defaults:
         _format: json
+
+setting-controllers:
+    resource:
+        path: ../src/Setting/Transport/Controller/Api/
+        namespace: App\Setting\Transport\Controller\Api
+    type: attribute
+    prefix: /api
+    defaults:
+        _format: json

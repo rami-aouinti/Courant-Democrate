@@ -42,3 +42,12 @@ setting-controllers:
     prefix: /api
     defaults:
         _format: json
+
+article-controllers:
+    resource:
+        path: ../src/Article/Transport/Controller/Api/
+        namespace: App\Article\Transport\Controller\Api
+    type: attribute
+    prefix: /api
+    defaults:
+        _format: json

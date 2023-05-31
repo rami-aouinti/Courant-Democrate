@@ -81,7 +81,7 @@ trait UserRelations
     ])]
     protected Setting|null $setting;
 
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Post::class)]
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Post::class,orphanRemoval: true)]
     #[Groups([
         'User.posts',
         User::SET_USER_PROFILE,
@@ -200,5 +200,21 @@ trait UserRelations
     public function setSetting(?Setting $setting): void
     {
         $this->setting = $setting;
+    }
+
+    /**
+     * @return ArrayCollection|Collection
+     */
+    public function getPosts(): ArrayCollection|Collection
+    {
+        return $this->posts;
+    }
+
+    /**
+     * @param ArrayCollection|Collection $posts
+     */
+    public function setPosts(ArrayCollection|Collection $posts): void
+    {
+        $this->posts = $posts;
     }
 }

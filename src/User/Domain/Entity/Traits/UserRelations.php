@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Domain\Entity\Traits;
 
+use App\Article\Domain\Entity\Post;
 use App\Log\Domain\Entity\LogLogin;
 use App\Log\Domain\Entity\LogLoginFailure;
 use App\Log\Domain\Entity\LogRequest;
@@ -79,6 +80,13 @@ trait UserRelations
         User::SET_USER_PROFILE,
     ])]
     protected Setting|null $setting;
+
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Post::class)]
+    #[Groups([
+        'User.posts',
+        User::SET_USER_PROFILE,
+    ])]
+    protected Collection | ArrayCollection $posts;
 
     /**
      * Getter for roles.

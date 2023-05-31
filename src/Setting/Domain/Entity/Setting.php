@@ -5,7 +5,7 @@ namespace App\Setting\Domain\Entity;
 use App\General\Domain\Entity\Interfaces\EntityInterface;
 use App\General\Domain\Entity\Traits\Timestampable;
 use App\General\Domain\Entity\Traits\Uuid;
-use App\Setting\Domain\Entity\Traits\Blameable;
+use App\Article\Domain\Entity\Traits\Blameable;
 use App\Setting\Infrastructure\Repository\SettingRepository;
 use App\User\Domain\Entity\User;
 use Doctrine\DBAL\Types\Types;

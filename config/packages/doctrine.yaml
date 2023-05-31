@@ -79,7 +79,12 @@ doctrine:
                         dir: '%kernel.project_dir%/src/Setting/Domain/Entity'
                         prefix: 'App\Setting\Domain\Entity'
                         alias: Setting
-
+                    Article:
+                        is_bundle: false
+                        type: attribute
+                        dir: '%kernel.project_dir%/src/Article/Domain/Entity'
+                        prefix: 'App\Article\Domain\Entity'
+                        alias: Article
                 dql:
                     datetime_functions:
                         datesub: DoctrineExtensions\Query\Mysql\DateSub

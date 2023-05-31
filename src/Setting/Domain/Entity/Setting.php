@@ -2,24 +2,24 @@
 
 namespace App\Setting\Domain\Entity;
 
+use App\General\Domain\Entity\Interfaces\EntityInterface;
 use App\General\Domain\Entity\Traits\Timestampable;
 use App\General\Domain\Entity\Traits\Uuid;
 use App\Setting\Domain\Entity\Traits\Blameable;
-use App\Setting\Domain\Repository\SettingRepository;
+use App\Setting\Infrastructure\Repository\SettingRepository;
 use App\User\Domain\Entity\User;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\JoinColumn;
 use Doctrine\ORM\Mapping\OneToOne;
+use OpenApi\Annotations as OA;
 use Ramsey\Uuid\Doctrine\UuidBinaryOrderedTimeType;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use OpenApi\Annotations as OA;
 
 #[ORM\Entity(repositoryClass: SettingRepository::class)]
 #[ORM\Table(name: 'setting')]
-class Setting
+class Setting implements EntityInterface
 {
     final public const SET_USER_PROFILE = 'set.UserProfile';
     final public const SET_USER_BASIC = 'set.UserBasic';

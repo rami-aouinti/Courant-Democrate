@@ -8,9 +8,9 @@ namespace App\Article\Application\DTO\Post;
 use App\User\Application\DTO\Traits\PatchUserGroups;
 
 /**
- * Class SettingPatch
+ * Class PostPatch
  *
- * @package App\Setting
+ * @package App\Article
  */
 class PostPatch extends Post
 {

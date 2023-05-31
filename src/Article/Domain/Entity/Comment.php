@@ -85,6 +85,7 @@ class Comment implements EntityInterface
         'Comment.content',
         self::SET_USER_PROFILE,
         self::SET_USER_BASIC,
+        User::SET_USER_POST
     ])]
     private ?string $content = null;
 
@@ -94,6 +95,7 @@ class Comment implements EntityInterface
         'Comment.publishedAt',
         self::SET_USER_PROFILE,
         self::SET_USER_BASIC,
+        User::SET_USER_POST
     ])]
     private \DateTime $publishedAt;
 
@@ -104,6 +106,7 @@ class Comment implements EntityInterface
         'Comment.author',
         self::SET_USER_PROFILE,
         self::SET_USER_BASIC,
+        User::SET_USER_POST
     ])]
     private ?User $author = null;
 

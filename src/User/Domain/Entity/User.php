@@ -52,6 +52,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     use Uuid;
 
     final public const SET_USER_PROFILE = 'set.UserProfile';
+
+    final public const SET_USER_POST = 'set.UserPost';
     final public const SET_USER_BASIC = 'set.UserBasic';
 
     final public const PASSWORD_MIN_LENGTH = 8;
@@ -78,6 +80,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
         self::SET_USER_PROFILE,
         self::SET_USER_BASIC,
+        self::SET_USER_POST
     ])]
     private UuidInterface $id;
 
@@ -93,6 +96,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
         self::SET_USER_PROFILE,
         self::SET_USER_BASIC,
+        self::SET_USER_POST
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
@@ -114,6 +118,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
         self::SET_USER_PROFILE,
         self::SET_USER_BASIC,
+        self::SET_USER_POST
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
@@ -135,6 +140,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
         self::SET_USER_PROFILE,
         self::SET_USER_BASIC,
+        self::SET_USER_POST
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]

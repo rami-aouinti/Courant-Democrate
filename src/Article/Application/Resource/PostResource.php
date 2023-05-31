@@ -11,9 +11,9 @@ use App\Article\Domain\Entity\Post as Entity;
 use App\Article\Domain\Repository\Interfaces\PostRepositoryInterface as RepositoryInterface;
 
 /**
- * Class SettingResource
+ * Class PostResource
  *
- * @package App\Setting
+ * @package App\Article
  *
  * @psalm-suppress LessSpecificImplementedReturnType
  * @codingStandardsIgnoreStart

@@ -6,9 +6,9 @@ namespace App\Article\Application\DTO\Comment;
 
 
 /**
- * Class SettingUpdate
+ * Class CommentUpdate
  *
- * @package App\Setting
+ * @package App\Article
  */
 class CommentUpdate extends Comment
 {

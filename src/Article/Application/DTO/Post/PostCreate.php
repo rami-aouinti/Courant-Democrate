@@ -4,13 +4,27 @@ declare(strict_types=1);
 
 namespace App\Article\Application\DTO\Post;
 
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
- * Class SettingCretae
+ * Class PostCreate
  *
- * @package App\Setting
+ * @package App\Article
  */
 class PostCreate extends Post
 {
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    protected string $title = '';
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    protected string $slug = '';
+
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    protected string $summary = '';
+
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    protected string $content = '';
 
 }

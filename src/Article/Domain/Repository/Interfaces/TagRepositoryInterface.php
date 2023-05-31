@@ -8,9 +8,9 @@ namespace App\Article\Domain\Repository\Interfaces;
 use App\Article\Domain\Entity\Tag as Entity;
 use Throwable;
 /**
- * SettingRepositoryInterface
+ * TagRepositoryInterface
  *
- * @package App\Setting
+ * @package App\Article
  */
 interface TagRepositoryInterface
 {

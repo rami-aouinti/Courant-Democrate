@@ -11,9 +11,9 @@ use App\Article\Domain\Entity\Comment as Entity;
 use App\Article\Domain\Repository\Interfaces\CommentRepositoryInterface as RepositoryInterface;
 
 /**
- * Class SettingResource
+ * Class CommentResource
  *
- * @package App\Setting
+ * @package App\Article
  *
  * @psalm-suppress LessSpecificImplementedReturnType
  * @codingStandardsIgnoreStart

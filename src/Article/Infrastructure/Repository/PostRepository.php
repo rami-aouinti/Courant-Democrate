@@ -10,7 +10,7 @@ use Throwable;
 
 /**
  *
- * @package App\Setting
+ * @package App\Article
  *
  * @psalm-suppress LessSpecificImplementedReturnType
  * @codingStandardsIgnoreStart

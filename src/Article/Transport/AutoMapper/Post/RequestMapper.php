@@ -14,7 +14,7 @@ use function array_map;
 /**
  * Class RequestMapper
  *
- * @package App\ApiKey
+ * @package App\Article
  */
 class RequestMapper extends RestRequestMapper
 {

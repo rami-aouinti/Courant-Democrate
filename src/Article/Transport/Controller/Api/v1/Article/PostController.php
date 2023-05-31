@@ -42,12 +42,6 @@ class PostController extends Controller
     use Actions\Post\PatchAction;
     use Actions\Post\UpdateAction;
 
-    public function __construct(
-        PostResource $resource,
-    ) {
-        parent::__construct($resource);
-    }
-
     /**
      * @var array<string, string>
      */
@@ -56,4 +50,10 @@ class PostController extends Controller
         Controller::METHOD_UPDATE => PostUpdate::class,
         Controller::METHOD_PATCH => PostPatch::class,
     ];
+
+    public function __construct(
+        PostResource $resource,
+    ) {
+        parent::__construct($resource);
+    }
 }

@@ -6,17 +6,18 @@ namespace App\Article\Application\DTO\Post;
 
 
 /**
- * Class SettingUpdate
+ * Class PostUpdate
  *
- * @package App\Setting
+ * @package App\Article
  */
 class PostUpdate extends Post
 {
 
-    protected string $siteName = '';
+    protected string $title = '';
+    protected string $slug = '';
 
-    protected string $sidebarTheme = '';
+    protected string $summary = '';
 
-    protected string $sidebarColor = '';
+    protected string $content = '';
 
 }

@@ -8,9 +8,9 @@ namespace App\Article\Domain\Repository\Interfaces;
 use App\Article\Domain\Entity\Comment as Entity;
 use Throwable;
 /**
- * SettingRepositoryInterface
+ * CommentRepositoryInterface
  *
- * @package App\Setting
+ * @package App\Article
  */
 interface CommentRepositoryInterface
 {

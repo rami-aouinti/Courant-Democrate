@@ -67,8 +67,7 @@ class Post implements EntityInterface
     #[Groups([
         'Post',
         'Post.id',
-        self::SET_USER_PROFILE,
-        self::SET_USER_BASIC,
+        User::SET_USER_POST
     ])]
     private UuidInterface $id;
 
@@ -77,8 +76,7 @@ class Post implements EntityInterface
     #[Groups([
         'Post',
         'Post.title',
-        self::SET_USER_PROFILE,
-        self::SET_USER_BASIC,
+        User::SET_USER_POST
     ])]
     private ?string $title = null;
 
@@ -86,8 +84,7 @@ class Post implements EntityInterface
     #[Groups([
         'Post',
         'Post.slug',
-        self::SET_USER_PROFILE,
-        self::SET_USER_BASIC,
+        User::SET_USER_POST
     ])]
     private ?string $slug = null;
 
@@ -97,8 +94,7 @@ class Post implements EntityInterface
     #[Groups([
         'Post',
         'Post.summary',
-        self::SET_USER_PROFILE,
-        self::SET_USER_BASIC,
+        User::SET_USER_POST
     ])]
     private ?string $summary = null;
 
@@ -108,8 +104,7 @@ class Post implements EntityInterface
     #[Groups([
         'Post',
         'Post.content',
-        self::SET_USER_PROFILE,
-        self::SET_USER_BASIC,
+        User::SET_USER_POST
     ])]
     private ?string $content = null;
 
@@ -117,8 +112,7 @@ class Post implements EntityInterface
     #[Groups([
         'Post',
         'Post.publishedAt',
-        self::SET_USER_PROFILE,
-        self::SET_USER_BASIC,
+        User::SET_USER_POST
     ])]
     private \DateTime $publishedAt;
 
@@ -127,8 +121,7 @@ class Post implements EntityInterface
     #[Groups([
         'Post',
         'Post.author',
-        self::SET_USER_PROFILE,
-        self::SET_USER_BASIC,
+        User::SET_USER_POST
     ])]
     private ?User $author = null;
 
@@ -140,8 +133,7 @@ class Post implements EntityInterface
     #[Groups([
         'Post',
         'Post.comments',
-        self::SET_USER_PROFILE,
-        self::SET_USER_BASIC,
+        User::SET_USER_POST
     ])]
     private Collection $comments;
 
@@ -155,8 +147,7 @@ class Post implements EntityInterface
     #[Groups([
         'Post',
         'Post.tags',
-        self::SET_USER_PROFILE,
-        self::SET_USER_BASIC,
+        User::SET_USER_POST
     ])]
     private Collection $tags;
 

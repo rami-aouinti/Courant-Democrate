@@ -8,9 +8,9 @@ namespace App\Article\Domain\Repository\Interfaces;
 use App\Article\Domain\Entity\Post as Entity;
 use Throwable;
 /**
- * SettingRepositoryInterface
+ * PostRepositoryInterface
  *
- * @package App\Setting
+ * @package App\Article
  */
 interface PostRepositoryInterface
 {

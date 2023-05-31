@@ -25,17 +25,19 @@ class Post extends RestDto
 {
 
     #[Assert\NotBlank]
-    private ?string $title = null;
+    private string $title;
 
-    private ?string $slug = null;
+    private string $slug;
 
-    #[Assert\NotBlank(message: 'post.blank_summary')]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
     #[Assert\Length(max: 255)]
-    private ?string $summary = null;
+    private string $summary;
 
-    #[Assert\NotBlank(message: 'post.blank_content')]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
     #[Assert\Length(min: 10, minMessage: 'post.too_short_content')]
-    private ?string $content = null;
+    private string $content;
 
     /**
      * @return string|null
@@ -46,9 +48,10 @@ class Post extends RestDto
     }
 
     /**
-     * @param string|null $title
+     * @param string $title
+     * @return Post
      */
-    public function setTitle(?string $title): self
+    public function setTitle(string $title): self
     {
         $this->setVisited('title');
         $this->title = $title;
@@ -66,6 +69,7 @@ class Post extends RestDto
 
     /**
      * @param string|null $slug
+     * @return Post
      */
     public function setSlug(?string $slug): self
     {
@@ -84,9 +88,10 @@ class Post extends RestDto
     }
 
     /**
-     * @param string|null $summary
+     * @param string $summary
+     * @return Post
      */
-    public function setSummary(?string $summary): self
+    public function setSummary(string $summary): self
     {
         $this->setVisited('summary');
         $this->summary = $summary;
@@ -103,9 +108,10 @@ class Post extends RestDto
     }
 
     /**
-     * @param string|null $content
+     * @param string $content
+     * @return Post
      */
-    public function setContent(?string $content): self
+    public function setContent(string $content): self
     {
         $this->setVisited('content');
         $this->content = $content;
@@ -121,6 +127,7 @@ class Post extends RestDto
     public function load(EntityInterface $entity): self
     {
         if ($entity instanceof Entity) {
+            $this->id = $entity->getId();
             $this->title = $entity->getTitle();
             $this->slug = $entity->getSlug();
             $this->summary = $entity->getSummary();

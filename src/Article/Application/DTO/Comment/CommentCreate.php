@@ -6,7 +6,7 @@ namespace App\Article\Application\DTO\Comment;
 
 
 /**
- * Class SettingCretae
+ * Class CommentCretae
  *
  * @package App\Article
  */

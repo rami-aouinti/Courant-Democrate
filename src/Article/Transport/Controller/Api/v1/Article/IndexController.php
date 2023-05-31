@@ -71,7 +71,7 @@ class IndexController
                 $loggedInUser->getPosts(),
                 'json',
                 [
-                    'groups' => User::SET_USER_PROFILE,
+                    'groups' => User::SET_USER_POST,
                 ]
             ),
             true,

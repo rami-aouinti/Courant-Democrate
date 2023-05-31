@@ -34,7 +34,7 @@ class PostType extends AbstractType
      */
     private static array $formFields = [
         [
-            '',
+            'title',
             Type\TextType::class,
             [
                 FormTypeLabelInterface::LABEL => 'title',

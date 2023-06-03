@@ -7,9 +7,13 @@ namespace App\User\Application\Security;
 use App\ApiKey\Application\Security\ApiKeyUser;
 use App\ApiKey\Application\Security\Provider\ApiKeyUserProvider;
 use App\ApiKey\Domain\Entity\ApiKey;
+use App\Project\Shared\Application\Service\AuthenticatorServiceInterface;
+use App\Project\Shared\Infrastructure\Service\ValueObject\AuthUser;
+use App\Project\Shared\Infrastructure\Service\ValueObject\SymfonySecurityUser;
 use App\User\Domain\Entity\User;
 use App\User\Domain\Repository\Interfaces\UserRepositoryInterface;
 use Doctrine\ORM\NonUniqueResultException;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -18,7 +22,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @package App\User
  */
-class UserTypeIdentification
+class UserTypeIdentification implements AuthenticatorServiceInterface
 {
     /**
      * @param \App\User\Infrastructure\Repository\UserRepository $userRepository
@@ -27,6 +31,7 @@ class UserTypeIdentification
         private readonly TokenStorageInterface $tokenStorage,
         private readonly UserRepositoryInterface $userRepository,
         private readonly ApiKeyUserProvider $apiKeyUserProvider,
+        private readonly JWTTokenManagerInterface $tokenManager,
     ) {
     }
 
@@ -52,6 +57,17 @@ class UserTypeIdentification
         $user = $this->getSecurityUser();
 
         return $user === null ? null : $this->userRepository->loadUserByIdentifier($user->getUserIdentifier(), true);
+    }
+
+    public function getAuthUser(): ?User
+    {
+        $user = $this->getSecurityUser();
+        return $user === null ? null : $this->userRepository->loadUserByIdentifier($user->getUserIdentifier(), true);
+    }
+
+    public function getToken(string $id): string
+    {
+        return $this->tokenManager->create(new SymfonySecurityUser($id));
     }
 
     /**

@@ -39,7 +39,17 @@ services:
             calls:
                 - setMailerService: [ '@App\General\Domain\Service\Interfaces\MailerServiceInterface', '%env(resolve:APP_SENDER_EMAIL)%', '%env(resolve:APP_ERROR_RECEIVER_EMAIL)%', '%env(int:APP_EMAIL_NOTIFICATION_ABOUT_ERROR)%']
                 - setTwig: ['@twig']
-
+        App\Project\Shared\Application\Bus\Command\CommandHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: command_bus }
+        App\Project\Shared\Application\Bus\Query\QueryHandlerInterface:
+            tags:
+                - { name: messenger.message_handler, bus: query.bus }
+        App\Project\Shared\Application\Bus\Event\EventSubscriberInterface:
+            tags:
+                - { name: messenger.message_handler, bus: event.bus }
+        App\Project\Shared\Domain\Event\DomainEvent:
+            tags: [ 'projects.domain_event' ]
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
@@ -50,7 +60,22 @@ services:
             - '../src/*/Domain/Entity/'
             - '../src/*/Transport/EventListener/'
             - '../src/Kernel.php'
+            - '../src/**/Application/Command/*'
+            - '../src/**/Application/Query/*'
+            - '../src/**/Mapping/*'
+            - '../src/**/Exception/*'
+            - '../src/**/ValueObject/*'
+            - '../src/**/DTO/*'
 
+    App\Project\Shared\Domain\:
+        resource: '../src/Project/Shared/Domain'
+        autowire: false
+    App\Project\Shared\SharedBoundedContext\Domain\:
+        resource: '../src/Project/Shared/SharedBoundedContext/Domain'
+        autowire: false
+    App\Project\Projects\Domain\:
+        resource: '../src/Project/Projects/Domain'
+        autowire: false
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     App\General\Transport\ValueResolver\EntityValueResolver:
@@ -75,6 +100,13 @@ services:
             $username: '%env(ELASTICSEARCH_USERNAME)%'
             $password: '%env(ELASTICSEARCH_PASSWORD)%'
         #lazy: true
+    App\Project\Shared\Infrastructure\Service\DomainEventMapper:
+        tags:
+            - { name: projects.mapper, target_tag: projects.domain_event }
+
+    App\Project\Shared\Infrastructure\Service\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onException }
 
 when@dev:
     services:

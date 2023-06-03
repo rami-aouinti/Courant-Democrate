@@ -15,6 +15,18 @@ doctrine:
                 url: '%env(resolve:DATABASE_URL)%'
                 mapping_types:
                     enum: string
+            read:
+                driver: 'pdo_mysql'
+                server_version: '8.0'
+                charset: utf8mb4
+                default_table_options:
+                    charset: utf8mb4
+                    collate: utf8mb4_unicode_ci
+                # https://symfony.com/doc/current/messenger.html#doctrine-transport
+                schema_filter: '~^(?!messenger_messages)~'
+                url: '%env(resolve:DATABASE_URL)%'
+                mapping_types:
+                    enum: string
         types:
             datetime: App\General\Domain\Doctrine\DBAL\Types\UTCDateTimeType
             datetimetz: App\General\Domain\Doctrine\DBAL\Types\UTCDateTimeType
@@ -85,6 +97,30 @@ doctrine:
                         dir: '%kernel.project_dir%/src/Article/Domain/Entity'
                         prefix: 'App\Article\Domain\Entity'
                         alias: Article
+                    SharedBoundedContext:
+                        type: xml
+                        dir: '%kernel.project_dir%/src/Project/Shared/SharedBoundedContext/Infrastructure/Persistence/Doctrine'
+                        is_bundle: false
+                        prefix: App\Project\Shared\SharedBoundedContext\Domain\Entity
+                        alias: SharedBoundedContext
+                    Projects:
+                        type: xml
+                        dir: '%kernel.project_dir%/src/Project/Projects/Infrastructure/Persistence/Doctrine/Proxy/Mapping'
+                        is_bundle: false
+                        prefix: App\Project\Projects\Infrastructure\Persistence\Doctrine\Proxy
+                        alias: Projects
+                    Projections:
+                        type: xml
+                        dir: '%kernel.project_dir%/src/Project/Projections/Infrastructure/Persistence/Doctrine'
+                        is_bundle: false
+                        prefix: App\Project\Projections\Domain\Entity
+                        alias: Projections
+                    Tasks:
+                        type: xml
+                        dir: '%kernel.project_dir%/src/Project/Tasks/Infrastructure/Persistence/Doctrine/Proxy/Mapping'
+                        is_bundle: false
+                        prefix: App\Project\Tasks\Infrastructure\Persistence\Doctrine\Proxy
+                        alias: Tasks
                 dql:
                     datetime_functions:
                         datesub: DoctrineExtensions\Query\Mysql\DateSub
@@ -92,7 +128,23 @@ doctrine:
                     string_functions:
                         uuid_o_t_to_bin: App\General\Infrastructure\DQL\UuidOTToBin
                         bin_to_uuid_o_t: App\General\Infrastructure\DQL\BinToUuidOT
-
+            read:
+                connection: read
+                naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+                auto_mapping: false
+                mappings:
+                    Projects:
+                        type: xml
+                        dir: '%kernel.project_dir%/src/Project/Projects/Infrastructure/Persistence/Doctrine/Mapping'
+                        is_bundle: false
+                        prefix: App\Project\Projects\Domain\Entity
+                        alias: Projects
+                    Tasks:
+                        type: xml
+                        dir: '%kernel.project_dir%/src/Project/Tasks/Infrastructure/Persistence/Doctrine/Mapping'
+                        is_bundle: false
+                        prefix: App\Project\Tasks\Domain\Entity
+                        alias: Tasks
 when@prod: &not-dev
     doctrine:
         dbal:

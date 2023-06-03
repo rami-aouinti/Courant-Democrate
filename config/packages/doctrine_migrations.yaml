@@ -3,6 +3,11 @@ doctrine_migrations:
         # namespace is arbitrary but should be different from App\Migrations
         # as migrations classes should NOT be autoloaded
         'DoctrineMigrations': '%kernel.project_dir%/migrations'
+        'App\Project\Tasks\Infrastructure\Persistence\Doctrine\Migrations': '%kernel.project_dir%/src/Project/Tasks/Infrastructure/Persistence/Doctrine/Migrations'
+        'App\Project\Shared\SharedBoundedContext\Infrastructure\Persistence\Doctrine\Migrations': '%kernel.project_dir%/src/Project/Shared/SharedBoundedContext/Infrastructure/Persistence/Doctrine/Migrations'
+        'App\Project\Projections\Infrastructure\Persistence\Doctrine\Migrations': '%kernel.project_dir%/src/Project/Projections/Infrastructure/Persistence/Doctrine/Migrations'
+        'App\Project\Projects\Infrastructure\Persistence\Doctrine\Migrations': '%kernel.project_dir%/src/Project/Projects/Infrastructure/Persistence/Doctrine/Migrations'
+
     enable_profiler: '%kernel.debug%'
     storage:
         table_storage:

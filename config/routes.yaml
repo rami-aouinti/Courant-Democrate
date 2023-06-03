@@ -51,3 +51,21 @@ article-controllers:
     prefix: /api
     defaults:
         _format: json
+
+project-controllers:
+    resource:
+        path: ../src/Project/Projects/Infrastructure/Controller
+        namespace: App\Project\Projects\Infrastructure\Controller
+    type: attribute
+    prefix: /api
+    defaults:
+        _format: json
+
+task-controllers:
+    resource:
+        path: ../src/Project/Tasks/Infrastructure/Controller
+        namespace: App\Project\Tasks\Infrastructure\Controller
+    type: attribute
+    prefix: /api
+    defaults:
+        _format: json

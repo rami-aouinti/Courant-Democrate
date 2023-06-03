@@ -1,5 +1,6 @@
 framework:
     messenger:
+        default_bus: command_bus
         buses:
             command_bus:
                 middleware:
@@ -18,9 +19,13 @@ framework:
                     # handlers do not need to call flush() and an error
                     # in any handler will cause a rollback
                     #- doctrine_transaction
+                    - doctrine_transaction
 
                     # or pass a different entity manager to any
                     #- doctrine_transaction: ['custom']
+            query.bus:
+            event.bus:
+                default_middleware: allow_no_handlers
 
         # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
         failure_transport: failed
@@ -58,7 +63,7 @@ framework:
                     # e.g. 1 second delay, 2 seconds, 4 seconds
                     multiplier: 2
                     max_delay: 0
-
+            sync: 'sync://'
             # Uncomment the following line to enable a transport named "amqp"
             # async: '%env(MESSENGER_TRANSPORT_DSN)%'
             failed: 'doctrine://default?queue_name=failed'
@@ -66,7 +71,9 @@ framework:
         routing:
             App\General\Infrastructure\Message\Interfaces\MessageHighInterface: async_priority_high
             App\General\Infrastructure\Message\Interfaces\MessageLowInterface: async_priority_low
-
+            App\Project\Shared\Domain\Event\DomainEvent: async_priority_high
+            App\Project\Shared\Application\Bus\Command\CommandInterface: sync
+            App\Project\Shared\Application\Bus\Query\QueryInterface: sync
             # Route your messages to the transports
             # 'App\General\Infrastructure\Message\YourMessage': async
 

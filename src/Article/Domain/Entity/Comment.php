@@ -69,12 +69,6 @@ class Comment implements EntityInterface
 
     #[ORM\ManyToOne(targetEntity: Post::class, inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups([
-        'Comment',
-        'Comment.post',
-        self::SET_USER_PROFILE,
-        self::SET_USER_BASIC,
-    ])]
     private ?Post $post = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -101,13 +95,6 @@ class Comment implements EntityInterface
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups([
-        'Comment',
-        'Comment.author',
-        self::SET_USER_PROFILE,
-        self::SET_USER_BASIC,
-        User::SET_USER_POST
-    ])]
     private ?User $author = null;
 
     public function __construct()

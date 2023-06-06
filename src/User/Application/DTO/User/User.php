@@ -58,6 +58,11 @@ class User extends RestDto
 
     #[Assert\NotBlank]
     #[Assert\NotNull]
+    #[Assert\Length(min: 2, max: 255)]
+    protected string $photo = '';
+
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
     #[Assert\Email]
     protected string $email = '';
 
@@ -125,6 +130,19 @@ class User extends RestDto
     {
         $this->setVisited('lastName');
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getPhoto(): string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(string $photo): self
+    {
+        $this->setVisited('photo');
+        $this->photo = $photo;
 
         return $this;
     }
@@ -230,6 +248,7 @@ class User extends RestDto
             $this->username = $entity->getUsername();
             $this->firstName = $entity->getFirstName();
             $this->lastName = $entity->getLastName();
+            $this->photo = $entity->getPhoto();
             $this->email = $entity->getEmail();
             $this->language = $entity->getLanguage();
             $this->locale = $entity->getLocale();

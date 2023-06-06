@@ -169,6 +169,28 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
     private string $email = '';
 
     #[ORM\Column(
+        name: 'photo',
+        type: Types::STRING,
+        length: 255,
+        nullable: true,
+    )]
+    #[Groups([
+        'User',
+        'User.photo',
+
+        self::SET_USER_PROFILE,
+        self::SET_USER_BASIC,
+        self::SET_USER_POST
+    ])]
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+    )]
+    private string $photo = '';
+
+    #[ORM\Column(
         name: 'language',
         type: AppTypes::ENUM_LANGUAGE,
         nullable: false,
@@ -260,6 +282,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         $this->logsLogin = new ArrayCollection();
         $this->logsLoginFailure = new ArrayCollection();
         $this->posts = new ArrayCollection();
+        $this->menus = new ArrayCollection();
+        $this->components = new ArrayCollection();
     }
 
     public function getId(): string
@@ -301,6 +325,22 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         $this->lastName = $lastName;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhoto(): string
+    {
+        return $this->photo;
+    }
+
+    /**
+     * @param string $photo
+     */
+    public function setPhoto(string $photo): void
+    {
+        $this->photo = $photo;
     }
 
     public function getEmail(): string

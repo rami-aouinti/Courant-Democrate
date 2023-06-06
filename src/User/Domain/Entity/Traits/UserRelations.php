@@ -8,6 +8,8 @@ use App\Article\Domain\Entity\Post;
 use App\Log\Domain\Entity\LogLogin;
 use App\Log\Domain\Entity\LogLoginFailure;
 use App\Log\Domain\Entity\LogRequest;
+use App\Setting\Domain\Entity\Component;
+use App\Setting\Domain\Entity\Menu;
 use App\Setting\Domain\Entity\Setting;
 use App\User\Domain\Entity\User;
 use App\User\Domain\Entity\UserGroup;
@@ -81,12 +83,28 @@ trait UserRelations
     ])]
     protected Setting|null $setting;
 
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Post::class,orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Post::class, orphanRemoval: true)]
     #[Groups([
         'User.posts',
         User::SET_USER_PROFILE,
     ])]
     protected Collection | ArrayCollection $posts;
+
+    #[ORM\ManyToMany(targetEntity: Menu::class, cascade: ["persist"])]
+    #[ORM\JoinTable(name: 'user_menu')]
+    #[Groups([
+        'User.menus',
+        User::SET_USER_PROFILE,
+    ])]
+    protected Collection $menus;
+
+    #[ORM\ManyToMany(targetEntity: Component::class, cascade: ["persist"])]
+    #[ORM\JoinTable(name: 'user_component')]
+    #[Groups([
+        'User.components',
+        User::SET_USER_PROFILE,
+    ])]
+    protected Collection $components;
 
     /**
      * Getter for roles.
@@ -216,5 +234,63 @@ trait UserRelations
     public function setPosts(ArrayCollection|Collection $posts): void
     {
         $this->posts = $posts;
+    }
+
+    /**
+     * @return ArrayCollection|Collection
+     */
+    public function getMenus(): ArrayCollection|Collection
+    {
+        return $this->menus;
+    }
+
+    /**
+     * @param ArrayCollection|Collection $menus
+     */
+    public function setMenus(ArrayCollection|Collection $menus): void
+    {
+        $this->menus = $menus;
+    }
+
+    public function addMenu(Menu $menu): self
+    {
+        if (!$this->menus->contains($menu)) {
+            $this->menus[] = $menu;
+        }
+        return $this;
+    }
+    public function removeMenu(Menu $menu): self
+    {
+        $this->menus->removeElement($menu);
+        return $this;
+    }
+
+    public function addComponent(Component $component): self
+    {
+        if (!$this->components->contains($component)) {
+            $this->components[] = $component;
+        }
+        return $this;
+    }
+    public function removeComponent(Component $component): self
+    {
+        $this->components->removeElement($component);
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection|Collection
+     */
+    public function getComponents(): ArrayCollection|Collection
+    {
+        return $this->components;
+    }
+
+    /**
+     * @param ArrayCollection|Collection $components
+     */
+    public function setComponents(ArrayCollection|Collection $components): void
+    {
+        $this->components = $components;
     }
 }

@@ -68,6 +68,10 @@ class CreateUserCommand extends Command
             self::PARAMETER_NAME => 'userGroups',
             self::PARAMETER_DESCRIPTION => 'User groups where to attach user',
         ],
+        [
+            self::PARAMETER_NAME => 'photo',
+            self::PARAMETER_DESCRIPTION => 'Photo for user',
+        ],
     ];
 
     /**

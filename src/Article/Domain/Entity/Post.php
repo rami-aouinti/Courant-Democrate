@@ -67,7 +67,8 @@ class Post implements EntityInterface
     #[Groups([
         'Post',
         'Post.id',
-        User::SET_USER_POST
+        User::SET_USER_POST,
+        User::SET_USER_PROFILE
     ])]
     private UuidInterface $id;
 
@@ -76,7 +77,8 @@ class Post implements EntityInterface
     #[Groups([
         'Post',
         'Post.title',
-        User::SET_USER_POST
+        User::SET_USER_POST,
+        User::SET_USER_PROFILE
     ])]
     private ?string $title = null;
 
@@ -84,7 +86,8 @@ class Post implements EntityInterface
     #[Groups([
         'Post',
         'Post.slug',
-        User::SET_USER_POST
+        User::SET_USER_POST,
+        User::SET_USER_PROFILE
     ])]
     private ?string $slug = null;
 
@@ -94,7 +97,8 @@ class Post implements EntityInterface
     #[Groups([
         'Post',
         'Post.summary',
-        User::SET_USER_POST
+        User::SET_USER_POST,
+        User::SET_USER_PROFILE
     ])]
     private ?string $summary = null;
 
@@ -104,7 +108,8 @@ class Post implements EntityInterface
     #[Groups([
         'Post',
         'Post.content',
-        User::SET_USER_POST
+        User::SET_USER_POST,
+        User::SET_USER_PROFILE
     ])]
     private ?string $content = null;
 
@@ -112,7 +117,8 @@ class Post implements EntityInterface
     #[Groups([
         'Post',
         'Post.publishedAt',
-        User::SET_USER_POST
+        User::SET_USER_POST,
+        User::SET_USER_PROFILE
     ])]
     private \DateTime $publishedAt;
 
@@ -133,7 +139,8 @@ class Post implements EntityInterface
     #[Groups([
         'Post',
         'Post.comments',
-        User::SET_USER_POST
+        User::SET_USER_POST,
+        User::SET_USER_PROFILE
     ])]
     private Collection $comments;
 
@@ -141,13 +148,14 @@ class Post implements EntityInterface
      * @var Collection<int, Tag>
      */
     #[ORM\ManyToMany(targetEntity: Tag::class, cascade: ['persist'])]
-    #[ORM\JoinTable(name: 'symfony_demo_post_tag')]
+    #[ORM\JoinTable(name: 'post_tag')]
     #[ORM\OrderBy(['name' => 'ASC'])]
     #[Assert\Count(max: 4, maxMessage: 'post.too_many_tags')]
     #[Groups([
         'Post',
         'Post.tags',
-        User::SET_USER_POST
+        User::SET_USER_POST,
+        User::SET_USER_PROFILE
     ])]
     private Collection $tags;
 

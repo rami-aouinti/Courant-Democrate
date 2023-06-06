@@ -9,12 +9,16 @@ use App\Article\Domain\Entity\Post;
 use App\Article\Domain\Entity\Tag;
 use App\General\Domain\Rest\UuidHelper;
 use App\Role\Application\Security\Interfaces\RolesServiceInterface;
+use App\Setting\Domain\Entity\Component;
+use App\Setting\Domain\Entity\Menu;
 use App\Setting\Domain\Entity\Setting;
 use App\Tests\Utils\PhpUnitUtil;
 use App\User\Domain\Entity\User;
 use App\User\Domain\Entity\UserGroup;
 use DateTime;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
@@ -122,6 +126,18 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface
         $settingEntity->setUpdatedBy($entity);
 
         $entity->setSetting($settingEntity);
+
+
+        for ($i = 0; $i<10 ; $i++) {
+            $entity->addMenu($this->getMenus($i));
+            $manager->persist($this->getMenus($i));
+        }
+
+        for ($i = 0; $i<10 ; $i++) {
+            $manager->persist($this->getComponents($i));
+            $entity->addComponent($this->getComponents($i));
+        }
+
         // Persist entity
         $manager->persist($settingEntity);
         $manager->persist($entity);
@@ -351,5 +367,33 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface
 
             return $tag;
         }, $selectedTags);
+    }
+
+
+    /**
+     * @param $i
+     * @return Menu
+     */
+    private function getMenus($i)
+    {
+        $menu = new Menu();
+        $menu->setMenuName("Dashboard"  . $i);
+        $menu->setMenuPath("/dashboard");
+        $menu->setMenuIcon("dashboard");
+
+
+        return $menu;
+    }
+
+    /**
+     * @param $i
+     * @return Component
+     */
+    private function getComponents($i): Component
+    {
+        $component = new Component();
+        $component->setComponentName('List Users' . $i);
+        $component->setActive(true);
+        return $component;
     }
 }

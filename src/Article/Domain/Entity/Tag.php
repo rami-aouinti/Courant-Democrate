@@ -27,7 +27,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * See https://symfony.com/doc/current/doctrine.html#creating-an-entity-class
  *
- * @author Yonel Ceruto <yonelceruto@gmail.com>
+ * @author Rami Aouinti <rami.aouinti@gmail.com>
  */
 #[ORM\Entity]
 #[ORM\Table(name: 'article_tag')]

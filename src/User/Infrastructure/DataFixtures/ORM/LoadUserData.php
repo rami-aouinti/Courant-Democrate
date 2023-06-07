@@ -7,6 +7,7 @@ namespace App\User\Infrastructure\DataFixtures\ORM;
 use App\Article\Domain\Entity\Comment;
 use App\Article\Domain\Entity\Post;
 use App\Article\Domain\Entity\Tag;
+use App\Event\Domain\Entity\Event;
 use App\General\Domain\Rest\UuidHelper;
 use App\Role\Application\Security\Interfaces\RolesServiceInterface;
 use App\Setting\Domain\Entity\Component;
@@ -136,6 +137,24 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface
         for ($i = 0; $i<10 ; $i++) {
             $manager->persist($this->getComponents($i));
             $entity->addComponent($this->getComponents($i));
+        }
+
+        $currentDate = new \DateTime('now');
+        $tomorrowDate = new \DateTime('tomorrow');
+        for ($i = 0; $i<10 ; $i++) {
+
+            $event = new Event();
+            $event->setTitle('event_test' . $i);
+            $event->setDescription('event_description' . $i);
+            $event->setBackgroundColor('red');
+            $event->setBorderColor('black');
+            $event->setTextColor('white');
+            $event->setStart($currentDate);
+            $event->setEnd($tomorrowDate);
+            $event->setClassName('bg-gradient-danger');
+            $event->setUser($entity);
+            $manager->persist($event);
+            $entity->addEvent($event);
         }
 
         // Persist entity

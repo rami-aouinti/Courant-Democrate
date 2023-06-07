@@ -43,6 +43,15 @@ setting-controllers:
     defaults:
         _format: json
 
+event-controllers:
+    resource:
+        path: ../src/Event/Transport/Controller/Api/
+        namespace: App\Event\Transport\Controller\Api
+    type: attribute
+    prefix: /api
+    defaults:
+        _format: json
+
 article-controllers:
     resource:
         path: ../src/Article/Transport/Controller/Api/

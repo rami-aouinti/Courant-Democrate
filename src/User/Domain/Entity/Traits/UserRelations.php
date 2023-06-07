@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\User\Domain\Entity\Traits;
 
 use App\Article\Domain\Entity\Post;
+use App\Event\Domain\Entity\Event;
 use App\Log\Domain\Entity\LogLogin;
 use App\Log\Domain\Entity\LogLoginFailure;
 use App\Log\Domain\Entity\LogRequest;
@@ -89,6 +90,13 @@ trait UserRelations
         User::SET_USER_PROFILE,
     ])]
     protected Collection | ArrayCollection $posts;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Event::class, orphanRemoval: true)]
+    #[Groups([
+        'User.events',
+        User::SET_USER_PROFILE,
+    ])]
+    protected Collection | ArrayCollection $events;
 
     #[ORM\ManyToMany(targetEntity: Menu::class, cascade: ["persist"])]
     #[ORM\JoinTable(name: 'user_menu')]
@@ -292,5 +300,34 @@ trait UserRelations
     public function setComponents(ArrayCollection|Collection $components): void
     {
         $this->components = $components;
+    }
+
+    /**
+     * @return ArrayCollection|Collection
+     */
+    public function getEvents(): ArrayCollection|Collection
+    {
+        return $this->events;
+    }
+
+    public function addEvent(Event $event): self
+    {
+        if (!$this->events->contains($event)) {
+            $this->events[] = $event;
+        }
+        return $this;
+    }
+    public function removeEvent(Event $event): self
+    {
+        $this->events->removeElement($event);
+        return $this;
+    }
+
+    /**
+     * @param ArrayCollection|Collection $events
+     */
+    public function setEvents(ArrayCollection|Collection $events): void
+    {
+        $this->events = $events;
     }
 }

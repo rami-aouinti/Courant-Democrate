@@ -284,6 +284,7 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         $this->posts = new ArrayCollection();
         $this->menus = new ArrayCollection();
         $this->components = new ArrayCollection();
+        $this->events = new ArrayCollection();
     }
 
     public function getId(): string

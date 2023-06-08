@@ -109,6 +109,12 @@ doctrine:
                         is_bundle: false
                         prefix: App\Project\Shared\SharedBoundedContext\Domain\Entity
                         alias: SharedBoundedContext
+                    Quiz:
+                        is_bundle: false
+                        type: attribute
+                        dir: '%kernel.project_dir%/src/Quiz/Domain/Entity'
+                        prefix: 'App\Quiz\Domain\Entity'
+                        alias: Quiz
                     Projects:
                         type: xml
                         dir: '%kernel.project_dir%/src/Project/Projects/Infrastructure/Persistence/Doctrine/Proxy/Mapping'

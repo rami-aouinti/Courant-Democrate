@@ -8,6 +8,7 @@ use App\Article\Domain\Entity\Comment;
 use App\Article\Domain\Entity\Post;
 use App\Article\Domain\Entity\Tag;
 use App\Event\Domain\Entity\Event;
+use App\General\Domain\Enum\Locale;
 use App\General\Domain\Rest\UuidHelper;
 use App\Role\Application\Security\Interfaces\RolesServiceInterface;
 use App\Setting\Domain\Entity\Component;
@@ -106,6 +107,7 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface
             ->setUsername('john' . $suffix)
             ->setFirstName('John')
             ->setLastName('Doe')
+            ->setLocale(Locale::FI)
             ->setEmail('john.doe' . $suffix . '@test.com')
             ->setPlainPassword('password' . $suffix);
 

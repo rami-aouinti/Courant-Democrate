@@ -50,13 +50,9 @@ abstract class RealEnumType extends Type
     public function convertToDatabaseValue($value, AbstractPlatform $platform): string
     {
         if (!in_array($value, static::$enum::cases(), true)) {
-            $message = sprintf(
-                "Invalid '%s' value '%s'",
-                static::$name,
-                is_string($value) ? $value : gettype($value),
-            );
 
-            throw new InvalidArgumentException($message);
+            return (string)parent::convertToDatabaseValue($value, $platform);
+
         }
 
         return (string)parent::convertToDatabaseValue($value->value, $platform);

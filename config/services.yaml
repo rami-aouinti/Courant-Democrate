@@ -59,6 +59,7 @@ services:
             - '../src/*/Infrastructure/DataFixtures/'
             - '../src/DependencyInjection/'
             - '../src/*/Domain/Entity/'
+            - '../src/Quiz/Transport/Controller/'
             - '../src/*/Transport/EventListener/'
             - '../src/Kernel.php'
             - '../src/**/Application/Command/*'
@@ -128,6 +129,8 @@ when@dev:
         App\User\Infrastructure\DataFixtures\:
             resource: '../src/User/Infrastructure/DataFixtures/*'
 
+        App\Quiz\Infrastructure\DataFixtures\:
+            resource: '../src/Quiz/Infrastructure/DataFixtures/*'
         App\Tests\TestCase\:
             resource: '../tests/TestCase/*'
 

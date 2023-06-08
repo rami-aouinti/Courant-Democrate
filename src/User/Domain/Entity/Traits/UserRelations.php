@@ -9,6 +9,12 @@ use App\Event\Domain\Entity\Event;
 use App\Log\Domain\Entity\LogLogin;
 use App\Log\Domain\Entity\LogLoginFailure;
 use App\Log\Domain\Entity\LogRequest;
+use App\Quiz\Domain\Entity\Category;
+use App\Quiz\Domain\Entity\Group;
+use App\Quiz\Domain\Entity\Language;
+use App\Quiz\Domain\Entity\Question;
+use App\Quiz\Domain\Entity\Quiz;
+use App\Quiz\Domain\Entity\Workout;
 use App\Setting\Domain\Entity\Component;
 use App\Setting\Domain\Entity\Menu;
 use App\Setting\Domain\Entity\Setting;
@@ -113,6 +119,27 @@ trait UserRelations
         User::SET_USER_PROFILE,
     ])]
     protected Collection $components;
+
+
+    #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'users')]
+    #[ORM\JoinTable(name: 'tbl_user_group')]
+    private ?Collection $groups;
+
+    #[ORM\OneToMany(mappedBy: 'created_by', targetEntity: Question::class)]
+    private Collection $questions;
+
+    #[ORM\OneToMany(mappedBy: 'created_by', targetEntity: Category::class)]
+    private Collection $categories;
+
+    #[ORM\OneToMany(mappedBy: 'student', targetEntity: Workout::class, orphanRemoval: true)]
+    private Collection $workouts;
+
+    #[ORM\OneToMany(mappedBy: 'created_by', targetEntity: Quiz::class, orphanRemoval: true)]
+    private Collection $quizzes;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?Language $prefered_language = null;
+
 
     /**
      * Getter for roles.
@@ -329,5 +356,164 @@ trait UserRelations
     public function setEvents(ArrayCollection|Collection $events): void
     {
         $this->events = $events;
+    }
+
+    /**
+     * @return Collection<int, Workout>
+     */
+    public function getWorkouts(): Collection
+    {
+        return $this->workouts;
+    }
+
+    public function addWorkout(Workout $workout): self
+    {
+        if (!$this->workouts->contains($workout)) {
+            $this->workouts->add($workout);
+            $workout->setStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWorkout(Workout $workout): self
+    {
+        if ($this->workouts->removeElement($workout)) {
+            // set the owning side to null (unless already changed)
+            if ($workout->getStudent() === $this) {
+                $workout->setStudent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Quiz>
+     */
+    public function getQuizzes(): Collection
+    {
+        return $this->quizzes;
+    }
+
+    public function addQuiz(Quiz $quiz): self
+    {
+        if (!$this->quizzes->contains($quiz)) {
+            $this->quizzes->add($quiz);
+            $quiz->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuiz(Quiz $quiz): self
+    {
+        if ($this->quizzes->removeElement($quiz)) {
+            // set the owning side to null (unless already changed)
+            if ($quiz->getCreatedBy() === $this) {
+                $quiz->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPreferedLanguage(): ?Language
+    {
+        return $this->prefered_language;
+    }
+
+    public function setPreferedLanguage(?Language $prefered_language): self
+    {
+        $this->prefered_language = $prefered_language;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Group>
+     */
+    public function getGroups(): ?Collection
+    {
+        return $this->groups;
+    }
+
+    public function addGroup(?Group $group): self
+    {
+        if (!$this->groups->contains($group)) {
+            $this->groups->add($group);
+            $group->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGroup(Group $group): self
+    {
+        if ($this->groups->removeElement($group)) {
+            $group->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Question>
+     */
+    public function getQuestions(): Collection
+    {
+        return $this->questions;
+    }
+
+    public function addQuestion(Question $question): self
+    {
+        if (!$this->questions->contains($question)) {
+            $this->questions->add($question);
+            $question->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuestion(Question $question): self
+    {
+        if ($this->questions->removeElement($question)) {
+            // set the owning side to null (unless already changed)
+            if ($question->getCreatedBy() === $this) {
+                $question->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories->add($category);
+            $category->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): self
+    {
+        if ($this->categories->removeElement($category)) {
+            // set the owning side to null (unless already changed)
+            if ($category->getCreatedBy() === $this) {
+                $category->setCreatedBy(null);
+            }
+        }
+
+        return $this;
     }
 }

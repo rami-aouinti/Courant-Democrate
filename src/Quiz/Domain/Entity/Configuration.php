@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Configuration
 {
     final public const SET_USER_PROFILE = 'set.UserProfile';
-    final public const SET_USER_EVENT = 'set.UserQuiz';
+    final public const SET_USER_QUIZ= 'set.UserQuiz';
 
 
     use Blameable;
@@ -38,23 +38,47 @@ class Configuration
         nullable: false,
     )]
     #[Groups([
-        'Event',
-        'Event.id',
-        self::SET_USER_EVENT,
+        'Configuration',
+        'Configuration.id',
+        self::SET_USER_QUIZ,
         User::SET_USER_PROFILE
     ])]
     private UuidInterface $id;
 
     #[ORM\Column(length: 255)]
+    #[Groups([
+        'Configuration',
+        'Configuration.const',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?string $const = null;
 
     #[ORM\Column(length: 25, nullable: true)]
+    #[Groups([
+        'Configuration',
+        'Configuration.type',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?string $type = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups([
+        'Configuration',
+        'Configuration.description',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?string $description = null;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Groups([
+        'Configuration',
+        'Configuration.value',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?string $value = null;
 
     public function __construct()

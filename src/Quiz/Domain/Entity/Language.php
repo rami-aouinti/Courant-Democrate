@@ -20,7 +20,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Language
 {
     final public const SET_USER_PROFILE = 'set.UserProfile';
-    final public const SET_USER_EVENT = 'set.UserQuiz';
+    final public const SET_USER_QUIZ= 'set.UserQuiz';
 
 
     use Blameable;
@@ -39,17 +39,29 @@ class Language
         nullable: false,
     )]
     #[Groups([
-        'Event',
-        'Event.id',
-        self::SET_USER_EVENT,
+        'Language',
+        'Language.id',
+        self::SET_USER_QUIZ,
         User::SET_USER_PROFILE
     ])]
     private UuidInterface $id;
 
     #[ORM\Column(length: 50, unique:true, nullable:false)]
+    #[Groups([
+        'Language',
+        'Language.english_name',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?string $english_name;
 
     #[ORM\Column(length: 50)]
+    #[Groups([
+        'Language',
+        'Language.native_name',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?string $native_name;
 
     #[ORM\OneToMany(mappedBy: 'language', targetEntity: Question::class)]

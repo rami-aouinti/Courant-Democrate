@@ -20,7 +20,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Group
 {
     final public const SET_USER_PROFILE = 'set.UserProfile';
-    final public const SET_USER_EVENT = 'set.UserQuiz';
+    final public const SET_USER_QUIZ= 'set.UserQuiz';
 
 
     use Blameable;
@@ -39,14 +39,20 @@ class Group
         nullable: false,
     )]
     #[Groups([
-        'Event',
-        'Event.id',
-        self::SET_USER_EVENT,
+        'Group',
+        'Group.id',
+        self::SET_USER_QUIZ,
         User::SET_USER_PROFILE
     ])]
     private UuidInterface $id;
 
     #[ORM\Column(length: 255)]
+    #[Groups([
+        'Group',
+        'Group.name',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private $name;
 
     #[ORM\ManyToOne(targetEntity: School::class, inversedBy:'groups')]
@@ -58,12 +64,30 @@ class Group
     private Collection $users;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups([
+        'Group',
+        'Group.code',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?string $code;
 
     #[ORM\Column(length: 50, nullable: false)]
+    #[Groups([
+        'Group',
+        'Group.shortname',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?string $shortname;
 
     #[ORM\Column(type: 'integer', nullable: true)]
+    #[Groups([
+        'Group',
+        'Group.ed_id',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?int $ed_id;
 
 

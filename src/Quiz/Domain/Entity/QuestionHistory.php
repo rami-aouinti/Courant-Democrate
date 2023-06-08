@@ -20,7 +20,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class QuestionHistory
 {
     final public const SET_USER_PROFILE = 'set.UserProfile';
-    final public const SET_USER_EVENT = 'set.UserQuiz';
+    final public const SET_USER_QUIZ = 'set.UserQuiz';
 
 
     use Blameable;
@@ -39,9 +39,9 @@ class QuestionHistory
         nullable: false,
     )]
     #[Groups([
-        'Event',
-        'Event.id',
-        self::SET_USER_EVENT,
+        'QuestionHistory',
+        'QuestionHistory.id',
+        self::SET_USER_QUIZ,
         User::SET_USER_PROFILE
     ])]
     private UuidInterface $id;
@@ -51,15 +51,39 @@ class QuestionHistory
     private ?Workout $workout;
 
     #[ORM\Column(type: 'integer')]
+    #[Groups([
+        'QuestionHistory',
+        'QuestionHistory.question_id',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?int $question_id;
 
     #[ORM\Column(type: 'text')]
+    #[Groups([
+        'QuestionHistory',
+        'QuestionHistory.question_text',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?string $question_text;
 
     #[ORM\Column(type: 'boolean')]
+    #[Groups([
+        'QuestionHistory',
+        'QuestionHistory.completed',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?bool $completed;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
+    #[Groups([
+        'QuestionHistory',
+        'QuestionHistory.question_success',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?bool $question_success;
 
     #[ORM\Column(type: 'dateinterval', nullable: true)]

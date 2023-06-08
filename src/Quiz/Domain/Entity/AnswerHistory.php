@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class AnswerHistory
 {
     final public const SET_USER_PROFILE = 'set.UserProfile';
-    final public const SET_USER_EVENT = 'set.UserQuiz';
+    final public const SET_USER_QUIZ= 'set.UserQuiz';
 
 
     use Blameable;
@@ -37,14 +37,20 @@ class AnswerHistory
         nullable: false,
     )]
     #[Groups([
-        'Event',
-        'Event.id',
-        self::SET_USER_EVENT,
+        'AnswerHistory',
+        'AnswerHistory.id',
+        self::SET_USER_QUIZ,
         User::SET_USER_PROFILE
     ])]
     private UuidInterface $id;
 
     #[ORM\Column(type: 'integer')]
+    #[Groups([
+        'AnswerHistory',
+        'AnswerHistory.answer_id',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?int $answer_id;
 
     #[ORM\ManyToOne(targetEntity: QuestionHistory::class, inversedBy:'answersHistory')]
@@ -52,15 +58,39 @@ class AnswerHistory
     private ?QuestionHistory $question_history;
 
     #[ORM\Column(type: 'text')]
+    #[Groups([
+        'AnswerHistory',
+        'AnswerHistory.answer_text',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?string $answer_text;
 
     #[ORM\Column(type: 'boolean')]
+    #[Groups([
+        'AnswerHistory',
+        'AnswerHistory.answer_correct',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?bool $answer_correct;
 
     #[ORM\Column(type: 'boolean')]
+    #[Groups([
+        'AnswerHistory',
+        'AnswerHistory.correct_given',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?bool $correct_given;
 
     #[ORM\Column(type: 'boolean')]
+    #[Groups([
+        'AnswerHistory',
+        'AnswerHistory.answer_succes',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?bool $answer_succes;
 
     public function __construct()

@@ -21,7 +21,7 @@ class Category
 {
 
     final public const SET_USER_PROFILE = 'set.UserProfile';
-    final public const SET_USER_EVENT = 'set.UserQuiz';
+    final public const SET_USER_QUIZ= 'set.UserQuiz';
 
 
     use Blameable;
@@ -39,17 +39,29 @@ class Category
         nullable: false,
     )]
     #[Groups([
-        'Event',
-        'Event.id',
-        self::SET_USER_EVENT,
+        'Category',
+        'Category.id',
+        self::SET_USER_QUIZ,
         User::SET_USER_PROFILE
     ])]
     private UuidInterface $id;
 
     #[ORM\Column(length: 50)]
+    #[Groups([
+        'Category',
+        'Category.shortname',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private mixed $shortname;
 
     #[ORM\Column(length: 255)]
+    #[Groups([
+        'Category',
+        'Category.longname',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private mixed $longname;
 
     #[ORM\ManyToMany(targetEntity: Quiz::class, mappedBy: 'categories')]

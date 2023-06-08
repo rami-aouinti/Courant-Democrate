@@ -11,7 +11,7 @@ use Throwable;
 
 /**
  *
- * @package App\Setting
+ * @package App\Quiz
  *
  * @psalm-suppress LessSpecificImplementedReturnType
  * @codingStandardsIgnoreStart
@@ -51,13 +51,6 @@ class AnswerRepository extends BaseRepository implements AnswerRepositoryInterfa
         $this->save($entity);
 
         return $entity;
-    }
-
-    public function findAll(?string $entityManagerName = null): array
-    {
-        $builder = $this->createQueryBuilder('a');
-        $builder->orderBy('a.text', 'ASC');
-        return $builder->getQuery()->getResult();
     }
 
 //    /**

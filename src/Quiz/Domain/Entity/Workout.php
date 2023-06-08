@@ -20,7 +20,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Workout
 {
     final public const SET_USER_PROFILE = 'set.UserProfile';
-    final public const SET_USER_EVENT = 'set.UserQuiz';
+    final public const SET_USER_QUIZ= 'set.UserQuiz';
 
 
     use Blameable;
@@ -39,9 +39,9 @@ class Workout
         nullable: false,
     )]
     #[Groups([
-        'Event',
-        'Event.id',
-        self::SET_USER_EVENT,
+        'Workout',
+        'Workout.id',
+        self::SET_USER_QUIZ,
         User::SET_USER_PROFILE
     ])]
     private UuidInterface $id;
@@ -61,21 +61,51 @@ class Workout
     private ?\DateTimeInterface $ended_at;
 
     #[ORM\Column(type: 'integer')]
+    #[Groups([
+        'Workout',
+        'Workout.number_of_questions',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?int $number_of_questions;
 
     #[ORM\Column(type: 'boolean')]
+    #[Groups([
+        'Workout',
+        'Workout.completed',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private false $completed;
 
     #[ORM\OneToMany(mappedBy: 'workout', targetEntity: QuestionHistory::class, orphanRemoval: true)]
     private ArrayCollection $questionsHistory;
 
     #[ORM\Column(type: 'float', nullable: true)]
+    #[Groups([
+        'Workout',
+        'Workout.score',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?float $score;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Groups([
+        'Workout',
+        'Workout.comment',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?string $comment;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups([
+        'Workout',
+        'Workout.token',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?string $token;
 
     #[ORM\ManyToOne(targetEntity: Session::class, inversedBy:'workouts')]

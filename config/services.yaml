@@ -59,7 +59,6 @@ services:
             - '../src/*/Infrastructure/DataFixtures/'
             - '../src/DependencyInjection/'
             - '../src/*/Domain/Entity/'
-            - '../src/Quiz/Transport/Controller/'
             - '../src/*/Transport/EventListener/'
             - '../src/Kernel.php'
             - '../src/**/Application/Command/*'

@@ -2,9 +2,13 @@
 
 namespace App\Quiz\Infrastructure\Repository;
 
+use App\General\Infrastructure\Repository\BaseRepository;
+use App\Quiz\Domain\Entity\Session as Entity;
 use App\Quiz\Domain\Entity\Session;
+use App\Quiz\Domain\Repository\Interfaces\SessionRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Throwable;
 
 /**
  * @method Session|null find($id, $lockMode = null, $lockVersion = null)
@@ -12,11 +16,30 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Session[]    findAll()
  * @method Session[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class SessionRepository extends ServiceEntityRepository
+class SessionRepository extends BaseRepository implements SessionRepositoryInterface
 {
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @psalm-var class-string
+     */
+    protected static string $entityName = Session::class;
+    public function __construct(
+        protected ManagerRegistry $managerRegistry,
+    ) {
+    }
+
+    /**
+     * Method to write new value to database.
+     *
+     * @throws Throwable
+     */
+    public function create(): Entity
     {
-        parent::__construct($registry, Session::class);
+        // Create new entity
+        $entity = new Entity();
+        // Store entity to database
+        $this->save($entity);
+
+        return $entity;
     }
 
     public function removeDuplicateWorkouts(int $session_id, int $quiz_id)

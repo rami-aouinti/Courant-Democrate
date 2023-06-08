@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Quiz
 {
     final public const SET_USER_PROFILE = 'set.UserProfile';
-    final public const SET_USER_EVENT = 'set.UserQuiz';
+    final public const SET_USER_QUIZ = 'set.UserQuiz';
 
 
     use Blameable;
@@ -40,23 +40,47 @@ class Quiz
         nullable: false,
     )]
     #[Groups([
-        'Event',
-        'Event.id',
-        self::SET_USER_EVENT,
+        'Quiz',
+        'Quiz.id',
+        self::SET_USER_QUIZ,
         User::SET_USER_PROFILE
     ])]
     private UuidInterface $id;
 
     #[ORM\Column(length: 255)]
+    #[Groups([
+        'Quiz',
+        'Quiz.title',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?string $title;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Groups([
+        'Quiz',
+        'Quiz.summary',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?string $summary;
 
     #[ORM\Column(type: 'integer')]
+    #[Groups([
+        'Quiz',
+        'Quiz.number_of_questions',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?int $number_of_questions;
 
     #[ORM\Column(type: 'boolean')]
+    #[Groups([
+        'Quiz',
+        'Quiz.active',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private false $active;
 
     #[ORM\Column(type: 'datetime')]
@@ -77,9 +101,21 @@ class Quiz
     private ArrayCollection $workouts;
 
     #[ORM\Column(type: 'boolean')]
+    #[Groups([
+        'Quiz',
+        'Quiz.show_result_question',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?bool $show_result_question;
 
     #[ORM\Column(type: 'boolean')]
+    #[Groups([
+        'Quiz',
+        'Quiz.show_result_quiz',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?bool $show_result_quiz;
 
     #[ORM\ManyToOne(targetEntity: Language::class, inversedBy:'quizzes')]
@@ -87,15 +123,39 @@ class Quiz
     private ?Language $language;
 
     #[ORM\Column(type: 'boolean')]
+    #[Groups([
+        'Quiz',
+        'Quiz.allow_anonymous_workout',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?bool $allow_anonymous_workout;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Groups([
+        'Quiz',
+        'Quiz.result_quiz_comment',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?string $result_quiz_comment;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    #[Groups([
+        'Quiz',
+        'Quiz.start_quiz_comment',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?string $start_quiz_comment;
 
     #[ORM\Column(type: 'integer', nullable: true)]
+    #[Groups([
+        'Quiz',
+        'Quiz.default_question_max_duration',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?int $default_question_max_duration;
 
     #[ORM\Column(type: 'datetime', nullable: true)]

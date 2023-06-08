@@ -2,7 +2,10 @@
 
 namespace App\Quiz\Infrastructure\Repository;
 
+use App\General\Infrastructure\Repository\BaseRepository;
+use App\Quiz\Domain\Entity\Configuration as Entity;
 use App\Quiz\Domain\Entity\Configuration;
+use App\Quiz\Domain\Repository\Interfaces\ConfigurationRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,29 +17,30 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Configuration[]    findAll()
  * @method Configuration[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ConfigurationRepository extends ServiceEntityRepository
+class ConfigurationRepository extends BaseRepository implements ConfigurationRepositoryInterface
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Configuration::class);
+    /**
+     * @psalm-var class-string
+     */
+    protected static string $entityName = Configuration::class;
+    public function __construct(
+        protected ManagerRegistry $managerRegistry,
+    ) {
     }
 
-    public function save(Configuration $entity, bool $flush = false): void
+    /**
+     * Method to write new value to database.
+     *
+     * @throws Throwable
+     */
+    public function create(): Entity
     {
-        $this->getEntityManager()->persist($entity);
+        // Create new entity
+        $entity = new Entity();
+        // Store entity to database
+        $this->save($entity);
 
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
-    public function remove(Configuration $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
+        return $entity;
     }
 
     public function getValue($value): ?String

@@ -2,8 +2,10 @@
 
 namespace App\Quiz\Infrastructure\Repository;
 
+use App\General\Infrastructure\Repository\BaseRepository;
+use App\Quiz\Domain\Entity\Workout as Entity;
 use App\Quiz\Domain\Entity\Workout;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Quiz\Domain\Repository\Interfaces\WorkoutRepositoryInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -12,11 +14,30 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Workout[]    findAll()
  * @method Workout[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class WorkoutRepository extends ServiceEntityRepository
+class WorkoutRepository extends BaseRepository implements WorkoutRepositoryInterface
 {
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @psalm-var class-string
+     */
+    protected static string $entityName = Workout::class;
+    public function __construct(
+        protected ManagerRegistry $managerRegistry,
+    ) {
+    }
+
+    /**
+     * Method to write new value to database.
+     *
+     * @throws Throwable
+     */
+    public function create(): Entity
     {
-        parent::__construct($registry, Workout::class);
+        // Create new entity
+        $entity = new Entity();
+        // Store entity to database
+        $this->save($entity);
+
+        return $entity;
     }
 
 

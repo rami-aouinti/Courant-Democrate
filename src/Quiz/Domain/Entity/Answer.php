@@ -20,7 +20,7 @@ class Answer implements \App\General\Domain\Entity\Interfaces\EntityInterface
 {
 
     final public const SET_USER_PROFILE = 'set.UserProfile';
-    final public const SET_USER_EVENT = 'set.UserQuiz';
+    final public const SET_USER_QUIZ= 'set.UserQuiz';
 
 
     use Blameable;
@@ -39,17 +39,29 @@ class Answer implements \App\General\Domain\Entity\Interfaces\EntityInterface
         nullable: false,
     )]
     #[Groups([
-        'Event',
-        'Event.id',
-        self::SET_USER_EVENT,
+        'Answer',
+        'Answer.id',
+        self::SET_USER_QUIZ,
         User::SET_USER_PROFILE
     ])]
     private UuidInterface $id;
 
     #[ORM\Column(type: 'text')]
+    #[Groups([
+        'Answer',
+        'Answer.text',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?string $text;
 
     #[ORM\Column(type: 'boolean')]
+    #[Groups([
+        'Answer',
+        'Answer.correct',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?bool $correct;
 
     #[ORM\ManyToOne(targetEntity: Question::class, inversedBy:'answers')]

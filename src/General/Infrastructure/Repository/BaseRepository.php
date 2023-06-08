@@ -76,6 +76,10 @@ abstract class BaseRepository implements BaseRepositoryInterface
      */
     private static array $processedCallbacks = [];
 
+    public function __construct(ManagerRegistry $registry)
+    {
+    }
+
     /**
      * {@inheritdoc}
      *

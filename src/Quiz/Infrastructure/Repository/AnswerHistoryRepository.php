@@ -2,9 +2,12 @@
 
 namespace App\Quiz\Infrastructure\Repository;
 
+use App\General\Infrastructure\Repository\BaseRepository;
 use App\Quiz\Domain\Entity\AnswerHistory;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Quiz\Domain\Repository\Interfaces\AnswerHistoryRepositoryInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Quiz\Domain\Entity\AnswerHistory as Entity;
+use Throwable;
 
 /**
  * @method AnswerHistory|null find($id, $lockMode = null, $lockVersion = null)
@@ -12,11 +15,32 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method AnswerHistory[]    findAll()
  * @method AnswerHistory[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class AnswerHistoryRepository extends ServiceEntityRepository
+class AnswerHistoryRepository extends BaseRepository implements AnswerHistoryRepositoryInterface
 {
-    public function __construct(ManagerRegistry $registry)
+
+    /**
+     * @psalm-var class-string
+     */
+    protected static string $entityName = AnswerHistory::class;
+
+    public function __construct(
+        protected ManagerRegistry $managerRegistry,
+    ) {
+    }
+
+    /**
+     * Method to write new value to database.
+     *
+     * @throws Throwable
+     */
+    public function create(): Entity
     {
-        parent::__construct($registry, AnswerHistory::class);
+        // Create new entity
+        $entity = new Entity();
+        // Store entity to database
+        $this->save($entity);
+
+        return $entity;
     }
 
 //    /**

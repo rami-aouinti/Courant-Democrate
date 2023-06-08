@@ -52,6 +52,15 @@ event-controllers:
     defaults:
         _format: json
 
+quiz-controllers:
+    resource:
+        path: ../src/Quiz/Transport/Controller/Api/
+        namespace: App\Quiz\Transport\Controller\Api
+    type: attribute
+    prefix: /api
+    defaults:
+        _format: json
+
 article-controllers:
     resource:
         path: ../src/Article/Transport/Controller/Api/

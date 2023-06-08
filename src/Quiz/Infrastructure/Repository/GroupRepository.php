@@ -2,9 +2,12 @@
 
 namespace App\Quiz\Infrastructure\Repository;
 
+use App\General\Infrastructure\Repository\BaseRepository;
+use App\Quiz\Domain\Entity\Group as Entity;
 use App\Quiz\Domain\Entity\Group;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Quiz\Domain\Repository\Interfaces\GroupRepositoryInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Throwable;
 
 /**
  * @method Group|null find($id, $lockMode = null, $lockVersion = null)
@@ -12,19 +15,32 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Group[]    findAll()
  * @method Group[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class GroupRepository extends ServiceEntityRepository
+class GroupRepository extends BaseRepository implements GroupRepositoryInterface
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Group::class);
+    /**
+     * @psalm-var class-string
+     */
+    protected static string $entityName = Group::class;
+    public function __construct(
+        protected ManagerRegistry $managerRegistry,
+    ) {
     }
 
-    public function findAll()
+    /**
+     * Method to write new value to database.
+     *
+     * @throws Throwable
+     */
+    public function create(): Entity
     {
-        $builder = $this->createQueryBuilder('g');
-        $builder->orderBy('g.name', 'ASC');
-        return $builder->getQuery()->getResult();
+        // Create new entity
+        $entity = new Entity();
+        // Store entity to database
+        $this->save($entity);
+
+        return $entity;
     }
+
 
     // /**
     //  * @return Group[] Returns an array of Group objects

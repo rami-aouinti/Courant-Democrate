@@ -2,8 +2,10 @@
 
 namespace App\Quiz\Infrastructure\Repository;
 
+use App\General\Infrastructure\Repository\BaseRepository;
 use App\Quiz\Domain\Entity\Language;
 use App\Quiz\Domain\Entity\Quiz;
+use App\Quiz\Domain\Repository\Interfaces\QuizRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -17,7 +19,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * @method Quiz[]    findAll()
  * @method Quiz[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class QuizRepository extends ServiceEntityRepository
+class QuizRepository extends BaseRepository implements QuizRepositoryInterface
 {
     private EntityManagerInterface $em;
     private ParameterBagInterface $param;
@@ -47,19 +49,6 @@ class QuizRepository extends ServiceEntityRepository
         return $quiz;
     }
 
-    public function find($id, $lockMode = null, $lockVersion = null)
-    {
-        $builder = $this->createQueryBuilder('q');
-
-        $builder->andWhere('q.id = :id');
-        $builder->setParameter('id', $id);
-
-        $builder->andWhere('q.language = :language');
-        $builder->setParameter('language', $this->language);
-
-        $builder->orderBy('q.title', 'ASC');
-        return $builder->getQuery()->getOneOrNullResult();
-    }
 
     public function findOne($id, $lockMode = null, $lockVersion = null, $isTeacher = false, $isAdmin = false)
     {
@@ -78,28 +67,6 @@ class QuizRepository extends ServiceEntityRepository
 
         $builder->orderBy('q.title', 'ASC');
         return $builder->getQuery()->getOneOrNullResult();
-    }
-
-    public function findAll($isTeacher = false, $isAdmin = false)
-    {
-        $builder = $this->createQueryBuilder('q');
-
-        $builder->andWhere('q.language = :language');
-        $builder->setParameter('language', $this->language);
-
-        if (!$isAdmin) {
-            if (!$isTeacher) {
-                $builder->andWhere('q.active = :active');
-                $builder->setParameter('active', true);
-            } else {
-                $builder->andWhere('q.created_by = :created_by');
-                $builder->setParameter('created_by', $this->tokenStorage->getToken()->getUser());
-            }
-        }
-
-        $builder->orderBy('q.active', 'DESC');
-        $builder->addOrderBy('q.title', 'ASC');
-        return $builder->getQuery()->getResult();
     }
 
     public function findAllByCategories(array $categories, $isTeacher = false, $isAdmin = false)

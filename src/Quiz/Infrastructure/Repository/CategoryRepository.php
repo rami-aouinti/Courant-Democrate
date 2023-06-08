@@ -2,13 +2,16 @@
 
 namespace App\Quiz\Infrastructure\Repository;
 
+use App\General\Infrastructure\Repository\BaseRepository;
 use App\Quiz\Domain\Entity\Category;
-use App\Quiz\Domain\Entity\Language;
+use App\Quiz\Domain\Entity\Category as Entity;
+use App\Quiz\Domain\Repository\Interfaces\CategoryRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Throwable;
 
 /**
  * @method Category|null find($id, $lockMode = null, $lockVersion = null)
@@ -16,66 +19,32 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
  * @method Category[]    findAll()
  * @method Category[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CategoryRepository extends ServiceEntityRepository
+class CategoryRepository extends BaseRepository implements CategoryRepositoryInterface
 {
-    private $em;
-    private $tokenStorage;
-    private $language;
 
-    public function __construct(ManagerRegistry $registry, EntityManagerInterface $em, ParameterBagInterface $param, TokenStorageInterface $tokenStorage)
-    {
-        parent::__construct($registry, Category::class);
-        $this->em = $em;
-        $this->tokenStorage = $tokenStorage;
-        $this->language = $this->em->getReference(Language::class, $param->get('locale'));
-    }
+    /**
+     * @psalm-var class-string
+     */
+    protected static string $entityName = Category::class;
 
-    public function create(): Category
-    {
-        $category = new Category();
-        $category->setLanguage($this->language);
-        return $category;
-    }
-
-    public function findAll($isTeacher = false, $isAdmin = false)
-    {
-        $builder = $this->createQueryBuilder('c');
-
-        $builder->andWhere('c.language = :language');
-        $builder->setParameter('language', $this->language);
-
-        if (!$isAdmin) {
-            $builder->andWhere('c.created_by = :created_by');
-            $builder->setParameter('created_by', $this->tokenStorage->getToken()->getUser());
-        }
-
-        $builder->orderBy('c.shortname', 'ASC');
-        return $builder->getQuery()->getResult();
+    public function __construct(
+        protected ManagerRegistry $managerRegistry,
+    ) {
     }
 
     /**
-     * @return Category[] Returns an array of Category objects
+     * Method to write new value to database.
+     *
+     * @throws Throwable
      */
-    public function findOneByShortnameAndLanguage($shortname, $language, $isTeacher = false, $isAdmin = false)
+    public function create(): Entity
     {
-        $builder = $this->createQueryBuilder('c');
+        // Create new entity
+        $entity = new Entity();
+        // Store entity to database
+        $this->save($entity);
 
-        $builder->andWhere('c.shortname = :shortname');
-        $builder->setParameter('shortname', $shortname);
-
-        $builder->andWhere('c.language = :language');
-        $builder->setParameter('language', $language);
-
-        if (!$isAdmin) {
-            $builder->andWhere('c.created_by = :created_by');
-            $builder->setParameter('created_by', $this->tokenStorage->getToken()->getUser());
-        }
-
-        $builder->orderBy('c.shortname', 'ASC');
-
-        // $builder->setMaxResults(10);
-
-        return $builder->getQuery()->getOneOrNullResult();
+        return $entity;
     }
 
     /*

@@ -2,7 +2,10 @@
 
 namespace App\Quiz\Infrastructure\Repository;
 
+use App\General\Infrastructure\Repository\BaseRepository;
+use App\Quiz\Domain\Entity\Language as Entity;
 use App\Quiz\Domain\Entity\Language;
+use App\Quiz\Domain\Repository\Interfaces\LanguageRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -12,11 +15,30 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Language[]    findAll()
  * @method Language[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class LanguageRepository extends ServiceEntityRepository
+class LanguageRepository extends BaseRepository implements LanguageRepositoryInterface
 {
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * @psalm-var class-string
+     */
+    protected static string $entityName = Language::class;
+    public function __construct(
+        protected ManagerRegistry $managerRegistry,
+    ) {
+    }
+
+    /**
+     * Method to write new value to database.
+     *
+     * @throws Throwable
+     */
+    public function create(): Entity
     {
-        parent::__construct($registry, Language::class);
+        // Create new entity
+        $entity = new Entity();
+        // Store entity to database
+        $this->save($entity);
+
+        return $entity;
     }
 
 //    /**

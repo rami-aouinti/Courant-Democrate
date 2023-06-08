@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Session
 {
     final public const SET_USER_PROFILE = 'set.UserProfile';
-    final public const SET_USER_EVENT = 'set.UserQuiz';
+    final public const SET_USER_QUIZ = 'set.UserQuiz';
 
 
     use Blameable;
@@ -40,9 +40,9 @@ class Session
         nullable: false,
     )]
     #[Groups([
-        'Event',
-        'Event.id',
-        self::SET_USER_EVENT,
+        'Session',
+        'Session.id',
+        self::SET_USER_QUIZ,
         User::SET_USER_PROFILE
     ])]
     private UuidInterface $id;
@@ -61,6 +61,12 @@ class Session
     private ArrayCollection $workouts;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
+    #[Groups([
+        'Session',
+        'Session.sended_to_ed',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?bool $sended_to_ed;
 
     public function __construct(Quiz $quiz, DateTime $started_at) {

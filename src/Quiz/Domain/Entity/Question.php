@@ -23,7 +23,7 @@ class Question
     public const NUM_ITEMS = 10;
 
     final public const SET_USER_PROFILE = 'set.UserProfile';
-    final public const SET_USER_EVENT = 'set.UserQuiz';
+    final public const SET_USER_QUIZ = 'set.UserQuiz';
 
 
     use Blameable;
@@ -41,14 +41,20 @@ class Question
         nullable: false,
     )]
     #[Groups([
-        'Event',
-        'Event.id',
-        self::SET_USER_EVENT,
+        'Question',
+        'Question.id',
+        self::SET_USER_QUIZ,
         User::SET_USER_PROFILE
     ])]
     private UuidInterface $id;
 
     #[ORM\Column(type: 'text')]
+    #[Groups([
+        'Question',
+        'Question.text',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?string $text;
 
     #[ORM\Column(type: 'datetime')]
@@ -74,6 +80,12 @@ class Question
     private ?Language $language;
 
     #[ORM\Column(type: 'integer', nullable: true)]
+    #[Groups([
+        'Question',
+        'Question.max_duration',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
     private ?int $max_duration;
 
 

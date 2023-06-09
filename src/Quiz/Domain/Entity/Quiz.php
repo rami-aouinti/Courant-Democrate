@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: QuizRepository::class)]
 #[ORM\Table(name: 'tbl_quiz')]
-class Quiz
+class Quiz implements \App\General\Domain\Entity\Interfaces\EntityInterface
 {
     final public const SET_USER_PROFILE = 'set.UserProfile';
     final public const SET_USER_QUIZ = 'set.UserQuiz';
@@ -95,10 +95,10 @@ class Quiz
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy:'quizzes')]
     #[ORM\JoinTable(name: 'tbl_quiz_category')]
-    private ArrayCollection $categories;
+    private Collection $categories;
 
     #[ORM\OneToMany(mappedBy: 'quiz', targetEntity: Workout::class, orphanRemoval: true)]
-    private ArrayCollection $workouts;
+    private Collection $workouts;
 
     #[ORM\Column(type: 'boolean')]
     #[Groups([
@@ -119,7 +119,7 @@ class Quiz
     private ?bool $show_result_quiz;
 
     #[ORM\ManyToOne(targetEntity: Language::class, inversedBy:'quizzes')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Language $language;
 
     #[ORM\Column(type: 'boolean')]
@@ -129,7 +129,7 @@ class Quiz
         self::SET_USER_QUIZ,
         User::SET_USER_PROFILE
     ])]
-    private ?bool $allow_anonymous_workout;
+    private ?bool $allow_anonymous_workout = false;
 
     #[ORM\Column(type: 'text', nullable: true)]
     #[Groups([
@@ -162,7 +162,7 @@ class Quiz
     private ?\DateTimeInterface $actived_at;
 
     #[ORM\OneToMany(mappedBy: 'quiz', targetEntity: Session::class, orphanRemoval: true)]
-    private ArrayCollection $sessions;
+    private Collection $sessions;
 
     public function __construct()
     {
@@ -269,7 +269,7 @@ class Quiz
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->created_at;
     }

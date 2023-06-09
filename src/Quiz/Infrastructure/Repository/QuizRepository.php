@@ -3,94 +3,49 @@
 namespace App\Quiz\Infrastructure\Repository;
 
 use App\General\Infrastructure\Repository\BaseRepository;
-use App\Quiz\Domain\Entity\Language;
 use App\Quiz\Domain\Entity\Quiz;
+use App\Quiz\Domain\Entity\Quiz as Entity;
 use App\Quiz\Domain\Repository\Interfaces\QuizRepositoryInterface;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Throwable;
 
 /**
- * @method Quiz|null find($id, $lockMode = null, $lockVersion = null)
- * @method Quiz|null findOneBy(array $criteria, array $orderBy = null)
- * @method Quiz[]    findAll()
- * @method Quiz[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Quiz|null find(string $id, ?int $lockMode = null, ?int $lockVersion = null, ?string $entityManagerName = null)
+ * @method Entity|null findAdvanced(string $id, string | int | null $hydrationMode = null, string|null $entityManagerName = null)
+ * @method Entity|null findOneBy(array $criteria, ?array $orderBy = null, ?string $entityManagerName = null)
+ * @method Entity[] findBy(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?string $entityManagerName = null)
+ * @method Entity[] findByAdvanced(array $criteria, ?array $orderBy = null, ?int $limit = null, ?int $offset = null, ?array $search = null, ?string $entityManagerName = null)
+ * @method Entity[] findAll(?string $entityManagerName = null)
  */
 class QuizRepository extends BaseRepository implements QuizRepositoryInterface
 {
-    private EntityManagerInterface $em;
-    private ParameterBagInterface $param;
-    private TokenStorageInterface $tokenStorage;
-    private null|Language $language;
-    private TranslatorInterface $translator;
+    /**
+     * @psalm-var class-string
+     */
+    protected static string $entityName = Quiz::class;
 
-    public function __construct(ManagerRegistry $registry, EntityManagerInterface $em, ParameterBagInterface $param, TranslatorInterface $translator, TokenStorageInterface $tokenStorage)
-    {
-        parent::__construct($registry, Quiz::class);
-        $this->em = $em;
-        $this->param = $param;
-        $this->tokenStorage = $tokenStorage;
-        $this->language = $this->em->getReference(Language::class, $this->param->get('locale'));
-        $this->translator = $translator;
-    }
-
-    public function create(): Quiz
-    {
-        $quiz = new Quiz();
-        $quiz->setLanguage($this->language);
-        $commentLines = "0-24: " . $this->translator->trans("Your result is not enough, please review and redo this quiz.") . "\n";
-        $commentLines = $commentLines . "25-50: " . $this->translator->trans("Your result is fairly average, we advise you to review the questions on which you made mistakes, then redo this quiz.") . "\n";
-        $commentLines = $commentLines . "51-75: " . $this->translator->trans("Good result. You have acquired most of the concepts covered in this quiz.") . "\n";
-        $commentLines = $commentLines . "76-100: " . $this->translator->trans("Congratulations! Your answers showed that you have a good knowledge of the concepts covered in this quiz.") . "\n";
-        $quiz->setResultQuizComment($commentLines);
-        return $quiz;
+    /**
+     * @param ManagerRegistry $managerRegistry
+     */
+    public function __construct(
+        protected ManagerRegistry $managerRegistry
+    ) {
     }
 
 
-    public function findOne($id, $lockMode = null, $lockVersion = null, $isTeacher = false, $isAdmin = false)
+    /**
+     * Method to write new value to database.
+     *
+     * @throws Throwable
+     */
+    public function create(): Entity
     {
-        $builder = $this->createQueryBuilder('q');
+        // Create new entity
+        $entity = new Entity();
+        // Store entity to database
+        $this->save($entity);
 
-        $builder->andWhere('q.id = :id');
-        $builder->setParameter('id', $id);
-
-        $builder->andWhere('q.language = :language');
-        $builder->setParameter('language', $this->language);
-
-        if (!$isAdmin) {
-            $builder->andWhere('q.created_by = :created_by');
-            $builder->setParameter('created_by', $this->tokenStorage->getToken()->getUser());
-        }
-
-        $builder->orderBy('q.title', 'ASC');
-        return $builder->getQuery()->getOneOrNullResult();
-    }
-
-    public function findAllByCategories(array $categories, $isTeacher = false, $isAdmin = false)
-    {
-        $builder = $this->createQueryBuilder('q');
-
-        $builder->andWhere('q.language = :language');
-        $builder->setParameter('language', $this->language);
-
-        if (!$isAdmin) {
-            $builder->andWhere('q.created_by = :created_by');
-            $builder->setParameter('created_by', $this->tokenStorage->getToken()->getUser());
-        }
-
-        $builder->innerJoin('q.categories', 'categories');
-        $builder->andWhere($builder->expr()->in('categories', ':categories'))->setParameter('categories', $categories);
-
-        if (!$isTeacher) {
-            $builder->andWhere('q.active = :active');
-            $builder->setParameter('active', true);
-        }
-
-        $builder->orderBy('q.title', 'ASC');
-        return $builder->getQuery()->getResult();
+        return $entity;
     }
 
 }

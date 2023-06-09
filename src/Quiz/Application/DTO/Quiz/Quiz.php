@@ -35,38 +35,27 @@ class Quiz extends RestDto
     #[Assert\Length(min: 2, max: 255)]
     protected string $summary = '';
 
-    #[Assert\NotBlank]
-    #[Assert\NotNull]
+
     protected int $number_of_questions;
 
-    #[Assert\NotBlank]
-    #[Assert\NotNull]
     protected bool $active = false;
 
-    #[Assert\NotBlank]
-    #[Assert\NotNull]
+
     protected bool $show_result_question = false;
 
-    #[Assert\NotBlank]
-    #[Assert\NotNull]
+
     protected bool $show_result_quiz = false;
 
-    #[Assert\NotBlank]
-    #[Assert\NotNull]
+
     protected bool $allow_anonymous_workout = false;
 
-    #[Assert\NotBlank]
-    #[Assert\NotNull]
-    #[Assert\Length(min: 2, max: 255)]
+
     protected string $result_quiz_comment = '';
 
-    #[Assert\NotBlank]
-    #[Assert\NotNull]
-    #[Assert\Length(min: 2, max: 255)]
+
     protected string $start_quiz_comment = '';
 
-    #[Assert\NotBlank]
-    #[Assert\NotNull]
+
     protected int $default_question_max_duration;
 
     /**

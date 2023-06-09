@@ -24,10 +24,8 @@ class RequestMapper extends RestRequestMapper
      * @var array<int, non-empty-string>
      */
     protected static array $properties = [
-        'siteName',
-        'sidebarColor',
-        'sidebarTheme',
-        'userGroups',
+        'title',
+        'summary'
     ];
 
     public function __construct(

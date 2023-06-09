@@ -113,6 +113,9 @@ services:
         arguments:
             $targetDirectory: '%avatar_directory%'
 
+    App\Quiz\Transport\Controller\Api\v1\IndexController:
+        autowire: false
+
 when@dev:
     services:
         _defaults:

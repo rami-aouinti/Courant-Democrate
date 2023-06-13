@@ -13,10 +13,4 @@ namespace App\Quiz\Application\DTO\Category;
 class CategoryUpdate extends Category
 {
 
-    protected string $siteName = '';
-
-    protected string $sidebarTheme = '';
-
-    protected string $sidebarColor = '';
-
 }

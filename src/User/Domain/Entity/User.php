@@ -290,6 +290,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         $this->groups = new ArrayCollection();
         $this->questions = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->participants = new ArrayCollection();
+        $this->messages = new ArrayCollection();
     }
 
     public function getId(): string

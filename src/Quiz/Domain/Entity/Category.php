@@ -17,7 +17,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ORM\Table(name: 'tbl_category')]
-class Category
+class Category implements \App\General\Domain\Entity\Interfaces\EntityInterface
 {
 
     final public const SET_USER_PROFILE = 'set.UserProfile';
@@ -199,7 +199,7 @@ class Category
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->created_at;
     }

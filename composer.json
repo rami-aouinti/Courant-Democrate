@@ -46,6 +46,7 @@
 		"doctrine/orm": "^2.15",
 		"dukecity/command-scheduler-bundle": "^5.0",
 		"elasticsearch/elasticsearch": "^7.17",
+		"firebase/php-jwt": "^6.5",
 		"gedmo/doctrine-extensions": "^3.11",
 		"lexik/jwt-authentication-bundle": "^2.19",
 		"mark-gerarts/automapper-plus-bundle": "^1.4",
@@ -87,8 +88,9 @@
 		"symfony/validator": "6.2.*",
 		"symfony/web-link": "6.2.*",
 		"symfony/yaml": "6.2.*",
-		"twig/extra-bundle": "^2.12|^3.0"
-	},
+		"twig/extra-bundle": "^2.12|^3.0",
+      "ext-curl": "*"
+    },
 	"conflict": {
 		"symfony/debug": "<3.3",
 		"symfony/symfony": "*",

@@ -6,7 +6,9 @@
 parameters:
     locale: 'en'
     avatar_directory: '%kernel.project_dir%/public/uploads/avatars'
-
+    mercure_secret_key: '%env(MERCURE_JWT_SECRET)%'
+    env(MERCURE_PUBLISH_URL): ""
+    env(MERCURE_JWT_SECRET): ""
 services:
     # default configuration for services in *this* file
     _defaults:

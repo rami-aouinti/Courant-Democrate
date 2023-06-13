@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\User\Domain\Entity\Traits;
 
 use App\Article\Domain\Entity\Post;
+use App\Chat\Domain\Entity\Message;
+use App\Chat\Domain\Entity\Participant;
 use App\Event\Domain\Entity\Event;
 use App\Log\Domain\Entity\LogLogin;
 use App\Log\Domain\Entity\LogLoginFailure;
@@ -14,6 +16,7 @@ use App\Quiz\Domain\Entity\Group;
 use App\Quiz\Domain\Entity\Language;
 use App\Quiz\Domain\Entity\Question;
 use App\Quiz\Domain\Entity\Quiz;
+use App\Quiz\Domain\Entity\Score;
 use App\Quiz\Domain\Entity\Workout;
 use App\Setting\Domain\Entity\Component;
 use App\Setting\Domain\Entity\Menu;
@@ -90,6 +93,13 @@ trait UserRelations
     ])]
     protected Setting|null $setting;
 
+    #[OneToOne(mappedBy: 'user', targetEntity: Score::class)]
+    #[Groups([
+        'User.score',
+        User::SET_USER_PROFILE,
+    ])]
+    protected Score|null $score;
+
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Post::class, orphanRemoval: true)]
     #[Groups([
         'User.posts',
@@ -140,6 +150,11 @@ trait UserRelations
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?Language $prefered_language = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Participant::class, orphanRemoval: true)]
+    private Collection $participants;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Message::class, orphanRemoval: true)]
+    private Collection $messages;
 
     /**
      * Getter for roles.
@@ -511,6 +526,82 @@ trait UserRelations
             // set the owning side to null (unless already changed)
             if ($category->getCreatedBy() === $this) {
                 $category->setCreatedBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Score|null
+     */
+    public function getScore(): ?Score
+    {
+        return $this->score;
+    }
+
+    /**
+     * @param Score|null $score
+     */
+    public function setScore(?Score $score): void
+    {
+        $this->score = $score;
+    }
+
+    /**
+     * @return Collection|Participant[]
+     */
+    public function getParticipants(): Collection|array
+    {
+        return $this->participants;
+    }
+
+    public function addParticipant(Participant $participant): self
+    {
+        if (!$this->participants->contains($participant)) {
+            $this->participants[] = $participant;
+            $participant->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParticipant(Participant $participant): self
+    {
+        if ($this->participants->removeElement($participant)) {
+            // set the owning side to null (unless already changed)
+            if ($participant->getUser() === $this) {
+                $participant->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Message $message): self
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages[] = $message;
+            $message->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Message $message): self
+    {
+        if ($this->messages->removeElement($message)) {
+            // set the owning side to null (unless already changed)
+            if ($message->getUser() === $this) {
+                $message->setUser(null);
             }
         }
 

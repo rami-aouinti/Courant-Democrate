@@ -54,9 +54,6 @@ class CategoryFixtures extends Fixture
      */
     private function loadLanguages(ObjectManager $manager) {
 
-
-
-
         $language = new Language();
         $language->setEnglishName('French');
         $language->setNativeName('Français');
@@ -76,14 +73,15 @@ class CategoryFixtures extends Fixture
             $category->setLanguage($language);
             $category->setShortname('Symfony ' . $i);
             $category->setLongname('Symfony (all versions) ' . $i);
-            $manager->persist($category);
 
 
-            for ($j = 0; $j < 10 ; $j ++) {
+
+            for ($j = 0; $j < 300 ; $j ++) {
                 $question = new Question();
                 $question->setLanguage($language1);
                 $question->setText('How many' . $j . ' In the box ?');
-                $question->setMaxDuration(60);
+                $question->setMaxDuration(random_int(10, 50));
+                $question->setComplicated(random_int(0, 10));
                 $question->addCategory($category);
 
 
@@ -100,6 +98,9 @@ class CategoryFixtures extends Fixture
 
                 $manager->persist($question);
             }
+
+            $category->addQuestion($question);
+            $manager->persist($category);
         }
 
 

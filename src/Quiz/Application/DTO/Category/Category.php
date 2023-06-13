@@ -46,10 +46,21 @@ class Category extends RestDto
     /**
      * @param string $shortname
      */
-    public function setLongname(string $shortname): self
+    public function setShortname(string $shortname): self
     {
         $this->setVisited('shortname');
         $this->shortname = $shortname;
+
+        return $this;
+    }
+
+    /**
+     * @param string $longname
+     */
+    public function setLongname(string $longname): self
+    {
+        $this->setVisited('longname');
+        $this->longname = $longname;
 
         return $this;
     }
@@ -62,16 +73,6 @@ class Category extends RestDto
         return $this->longname;
     }
 
-    /**
-     * @param string $longname
-     */
-    public function setSidebarColor(string $longname): self
-    {
-        $this->setVisited('longname');
-        $this->longname = $longname;
-
-        return $this;
-    }
 
     /**
      * {@inheritdoc}

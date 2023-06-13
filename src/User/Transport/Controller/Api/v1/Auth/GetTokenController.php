@@ -86,7 +86,7 @@ class GetTokenController
             'You need to send JSON body to obtain token eg. %s',
             JSON::encode([
                 'username' => 'username',
-                'password' => 'password',
+                'password' => 'password'
             ]),
         );
 

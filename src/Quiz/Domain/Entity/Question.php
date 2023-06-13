@@ -89,6 +89,14 @@ class Question
     private ?int $max_duration;
 
 
+    #[ORM\Column(type: 'integer', nullable: true)]
+    #[Groups([
+        'Question',
+        'Question.complicated',
+        self::SET_USER_QUIZ,
+        User::SET_USER_PROFILE
+    ])]
+    private ?int $complicated;
 
 
     public function __construct()
@@ -249,6 +257,22 @@ class Question
         $this->max_duration = $max_duration;
 
         return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getComplicated(): ?int
+    {
+        return $this->complicated;
+    }
+
+    /**
+     * @param int|null $complicated
+     */
+    public function setComplicated(?int $complicated): void
+    {
+        $this->complicated = $complicated;
     }
 
 }

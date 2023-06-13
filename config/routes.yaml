@@ -1,3 +1,10 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+    prefix: /
+
 api-key-controllers:
     resource:
         path: ../src/ApiKey/Transport/Controller/Api/
@@ -38,6 +45,15 @@ setting-controllers:
     resource:
         path: ../src/Setting/Transport/Controller/Api/
         namespace: App\Setting\Transport\Controller\Api
+    type: attribute
+    prefix: /api
+    defaults:
+        _format: json
+
+chat-controllers:
+    resource:
+        path: ../src/Chat/Transport/Controller/Api/
+        namespace: App\Chat\Transport\Controller\Api
     type: attribute
     prefix: /api
     defaults:

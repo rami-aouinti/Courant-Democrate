@@ -5,7 +5,9 @@ framework:
     http_method_override: false
     handle_all_throwables: true
     default_locale: '%locale%'
-
+    http_client:
+        default_options:
+            verify_peer: false
     # see https://symfony.com/doc/current/deployment/proxies.html
     trusted_proxies: '%env(TRUSTED_PROXIES)%'
     trusted_headers: [ 'x-forwarded-for', 'x-forwarded-host', 'x-forwarded-proto', 'x-forwarded-port', 'x-forwarded-prefix' ]
@@ -29,6 +31,12 @@ framework:
 
     #esi: true
     #fragments: true
+when@dev:
+    framework:
+        http_client:
+            default_options:
+                verify_peer: false
+
 
 when@test:
     framework:

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\User\Domain\Entity;
 
+use App\Article\Domain\Entity\Post;
 use App\General\Domain\Doctrine\DBAL\Types\Types as AppTypes;
 use App\General\Domain\Entity\Interfaces\EntityInterface;
 use App\General\Domain\Entity\Traits\Timestampable;
@@ -80,7 +81,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
         self::SET_USER_PROFILE,
         self::SET_USER_BASIC,
-        self::SET_USER_POST
+        self::SET_USER_POST,
+        Post::SET_USER_ARTICLE
     ])]
     private UuidInterface $id;
 
@@ -96,7 +98,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
         self::SET_USER_PROFILE,
         self::SET_USER_BASIC,
-        self::SET_USER_POST
+        self::SET_USER_POST,
+        Post::SET_USER_ARTICLE
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
@@ -118,7 +121,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
         self::SET_USER_PROFILE,
         self::SET_USER_BASIC,
-        self::SET_USER_POST
+        self::SET_USER_POST,
+        Post::SET_USER_ARTICLE
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
@@ -140,7 +144,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
         self::SET_USER_PROFILE,
         self::SET_USER_BASIC,
-        self::SET_USER_POST
+        self::SET_USER_POST,
+        Post::SET_USER_ARTICLE
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]
@@ -180,7 +185,8 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 
         self::SET_USER_PROFILE,
         self::SET_USER_BASIC,
-        self::SET_USER_POST
+        self::SET_USER_POST,
+        Post::SET_USER_ARTICLE
     ])]
     #[Assert\NotBlank]
     #[Assert\NotNull]

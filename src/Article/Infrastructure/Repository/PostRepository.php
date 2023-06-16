@@ -2,9 +2,12 @@
 
 namespace App\Article\Infrastructure\Repository;
 
+use App\Article\Domain\Entity\Post;
 use App\General\Infrastructure\Repository\BaseRepository;
 use App\Article\Domain\Entity\Post as Entity;
 use App\Article\Domain\Repository\Interfaces\PostRepositoryInterface;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Throwable;
 
@@ -51,4 +54,25 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
 
         return $entity;
     }
+
+    /**
+     * Method to read value from database
+     *
+     * @return array|null
+     */
+    public function read(): ?array
+    {
+        $query = $this
+            ->createQueryBuilder('p')
+            ->select('p')
+            ->leftJoin('p.comments', 'c')
+            ->leftJoin('p.author', 'u')
+            ->where('p.publishedAt <= :now')
+            ->orderBy('p.publishedAt', 'DESC')
+            ->setParameter('now', new \DateTime())
+            ->getQuery();
+
+        return $query->getResult();
+    }
+
 }

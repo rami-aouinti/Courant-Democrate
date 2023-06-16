@@ -63,6 +63,7 @@ class Comment implements EntityInterface
         'Comment.id',
         self::SET_USER_PROFILE,
         self::SET_USER_BASIC,
+        Post::SET_USER_ARTICLE
     ])]
     private UuidInterface $id;
 
@@ -78,7 +79,8 @@ class Comment implements EntityInterface
         'Comment.content',
         self::SET_USER_PROFILE,
         self::SET_USER_BASIC,
-        User::SET_USER_POST
+        User::SET_USER_POST,
+        Post::SET_USER_ARTICLE
     ])]
     private ?string $content = null;
 
@@ -86,14 +88,19 @@ class Comment implements EntityInterface
     #[Groups([
         'Comment',
         'Comment.publishedAt',
-        self::SET_USER_PROFILE,
         self::SET_USER_BASIC,
-        User::SET_USER_POST
+        Post::SET_USER_ARTICLE
     ])]
     private \DateTime $publishedAt;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups([
+        'Comment',
+        'Comment.author',
+        self::SET_USER_BASIC,
+        Post::SET_USER_ARTICLE
+    ])]
     private ?User $author = null;
 
     public function __construct()

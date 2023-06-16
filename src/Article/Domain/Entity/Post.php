@@ -44,7 +44,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Post implements EntityInterface
 {
 
-    final public const SET_USER_PROFILE = 'set.UserProfile';
+    final public const SET_USER_ARTICLE = 'set.UserArticle';
     final public const SET_USER_BASIC = 'set.UserBasic';
 
 
@@ -66,7 +66,7 @@ class Post implements EntityInterface
         'Post',
         'Post.id',
         User::SET_USER_POST,
-        User::SET_USER_PROFILE
+        self::SET_USER_ARTICLE
     ])]
     private UuidInterface $id;
 
@@ -76,7 +76,7 @@ class Post implements EntityInterface
         'Post',
         'Post.title',
         User::SET_USER_POST,
-        User::SET_USER_PROFILE
+        self::SET_USER_ARTICLE
     ])]
     private ?string $title = null;
 
@@ -85,7 +85,7 @@ class Post implements EntityInterface
         'Post',
         'Post.slug',
         User::SET_USER_POST,
-        User::SET_USER_PROFILE
+        self::SET_USER_ARTICLE
     ])]
     private ?string $slug = null;
 
@@ -96,7 +96,7 @@ class Post implements EntityInterface
         'Post',
         'Post.summary',
         User::SET_USER_POST,
-        User::SET_USER_PROFILE
+        self::SET_USER_ARTICLE
     ])]
     private ?string $summary = null;
 
@@ -107,7 +107,7 @@ class Post implements EntityInterface
         'Post',
         'Post.content',
         User::SET_USER_POST,
-        User::SET_USER_PROFILE
+        self::SET_USER_ARTICLE
     ])]
     private ?string $content = null;
 
@@ -115,8 +115,7 @@ class Post implements EntityInterface
     #[Groups([
         'Post',
         'Post.publishedAt',
-        User::SET_USER_POST,
-        User::SET_USER_PROFILE
+        self::SET_USER_ARTICLE
     ])]
     private \DateTime $publishedAt;
 
@@ -125,7 +124,8 @@ class Post implements EntityInterface
     #[Groups([
         'Post',
         'Post.author',
-        User::SET_USER_POST
+        User::SET_USER_POST,
+        self::SET_USER_ARTICLE
     ])]
     private ?User $author = null;
 
@@ -164,6 +164,8 @@ class Post implements EntityInterface
         $this->tags = new ArrayCollection();
         $this->id = $this->createUuid();
     }
+
+
 
     /**
      * @return UuidInterface

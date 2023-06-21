@@ -59,6 +59,24 @@ chat-controllers:
     defaults:
         _format: json
 
+notification-controllers:
+    resource:
+        path: ../src/Notification/Transport/Controller/Api/
+        namespace: App\Notification\Transport\Controller\Api
+    type: attribute
+    prefix: /api
+    defaults:
+        _format: json
+
+resume-controllers:
+    resource:
+        path: ../src/Resume/Transport/Controller/Api/
+        namespace: App\Resume\Transport\Controller\Api
+    type: attribute
+    prefix: /api
+    defaults:
+        _format: json
+
 event-controllers:
     resource:
         path: ../src/Event/Transport/Controller/Api/

@@ -16,12 +16,12 @@ use App\Project\Projects\Domain\Entity\Project;
 use App\Project\Projects\Domain\Repository\ProjectRepositoryInterface;
 use App\Project\Projects\Domain\ValueObject\ProjectTaskId;
 
-final class ProjectEventHandler
+final readonly class ProjectEventHandler
 {
     public function __construct(
-        private readonly ProjectRepositoryInterface $repository,
-        private readonly UuidGeneratorInterface $uuidGenerator,
-        private readonly EventBusInterface $eventBus
+        private ProjectRepositoryInterface $repository,
+        private UuidGeneratorInterface     $uuidGenerator,
+        private EventBusInterface          $eventBus
     ) {
     }
 

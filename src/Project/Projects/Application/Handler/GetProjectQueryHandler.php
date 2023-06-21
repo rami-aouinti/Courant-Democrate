@@ -39,11 +39,11 @@ final class GetProjectQueryHandler implements QueryHandlerInterface
         $project = $this->projectRepository->findByCriteria(
             new Criteria([
                 new ExpressionOperand('id', '=', $query->id),
-                new ExpressionOperand('userId', '=', $userId->value),
+                new ExpressionOperand('userId', '=', $userId),
             ])
         );
         if (null === $project) {
-            throw new UserIsNotInProjectException($userId->value, $query->id);
+            throw new UserIsNotInProjectException($userId, $query->id);
         }
 
         return new GetProjectQueryResponse($project);

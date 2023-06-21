@@ -14,7 +14,6 @@ class PostUpdate extends Post
 {
 
     protected string $title = '';
-    protected string $slug = '';
 
     protected string $summary = '';
 

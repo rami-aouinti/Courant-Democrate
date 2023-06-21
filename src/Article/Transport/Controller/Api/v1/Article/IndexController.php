@@ -8,22 +8,20 @@ use App\Article\Application\Service\PostService;
 use App\Article\Domain\Entity\Comment;
 use App\Article\Domain\Entity\Post;
 use App\General\Domain\Utils\JSON;
-use App\Role\Application\Security\RolesService;
+use App\General\Infrastructure\Service\MailerService;
+use App\Notification\Application\Service\Notifier;
 use App\User\Domain\Entity\User;
 use JsonException;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Attribute\Cache;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
@@ -36,9 +34,16 @@ use Doctrine\ORM\EntityManagerInterface;
 #[AsController]
 class IndexController
 {
+    /**
+     * @param SerializerInterface $serializer
+     * @param PostService $postService
+     * @param MailerService $mailerService
+     */
     public function __construct(
         private readonly SerializerInterface $serializer,
         private readonly PostService $postService,
+        private readonly MailerService $mailerService,
+        private readonly Notifier $notifier
     ) {
     }
 
@@ -107,6 +112,32 @@ class IndexController
      * (postSlug) doesn't match any of the Doctrine entity properties (slug).
      *
      * See https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/converters.html#doctrine-converter
+     * @throws \Throwable
+     */
+    #[Route('/v1/article/new', name: 'article_new', methods: ['POST'])]
+    #[IsGranted('IS_AUTHENTICATED')]
+    public function articleNew(
+        User $loggedInUser,
+        Request $request,
+        EntityManagerInterface $entityManager
+    ): JsonResponse {
+        $post = new Post();
+        $post->setTitle($request->request->get('title'));
+        $post->setSlug($this->slugify($request->request->get('title')));
+        $post->setContent($request->request->get('content'));
+        $post->setSummary($request->request->get('summary'));
+        $post->setAuthor($loggedInUser);
+        $entityManager->persist($post);
+        $entityManager->flush();
+        $this->notifier->sendNotification('New Article from '. $loggedInUser->getUsername() . '  ', 'notifications', 'post?id=' . $post->getId());
+        return new JsonResponse(array('post' => $post->getId()));
+    }
+
+    /**
+     * NOTE: The ParamConverter mapping is required because the route parameter
+     * (postSlug) doesn't match any of the Doctrine entity properties (slug).
+     *
+     * See https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/converters.html#doctrine-converter
      */
     #[Route('/v1/comment/{postSlug}/new', name: 'comment_new', methods: ['POST'])]
     #[IsGranted('IS_AUTHENTICATED')]
@@ -126,5 +157,13 @@ class IndexController
         $entityManager->flush();
 
         return new JsonResponse(array('comment' => $comment->getContent()));
+    }
+
+    /**
+     * @param $string
+     * @return string
+     */
+    private function slugify($string){
+        return strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $string), '-'));
     }
 }

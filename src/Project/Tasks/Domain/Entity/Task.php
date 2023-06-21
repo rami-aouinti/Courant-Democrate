@@ -23,7 +23,7 @@ final class Task implements Hashable
     public function __construct(
         private TaskId $id,
         private TaskInformation $information,
-        private UserId $ownerId,
+        private string $ownerId,
         private TaskStatus $status,
         private TaskLinkCollection $links
     ) {
@@ -96,7 +96,7 @@ final class Task implements Hashable
         return $this->information;
     }
 
-    public function getOwnerId(): UserId
+    public function getOwnerId(): string
     {
         return $this->ownerId;
     }

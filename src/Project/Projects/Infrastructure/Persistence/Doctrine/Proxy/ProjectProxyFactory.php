@@ -54,7 +54,7 @@ final class ProjectProxyFactory
             ),
             ProjectStatus::createFromScalar($proxy->getStatus()),
             new Owner(
-                new UserId($proxy->getOwnerId())
+                $proxy->getOwnerId()
             ),
             new Participants($participants),
             new ProjectTasks($tasks),

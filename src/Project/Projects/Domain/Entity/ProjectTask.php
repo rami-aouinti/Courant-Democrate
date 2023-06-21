@@ -46,6 +46,6 @@ final class ProjectTask implements Hashable
 
         return $this->id->isEqual($other->id) &&
             $this->taskId->isEqual($other->taskId) &&
-            $this->ownerId->isEqual($other->ownerId);
+            $this->ownerId === $other->o->ownerId;
     }
 }

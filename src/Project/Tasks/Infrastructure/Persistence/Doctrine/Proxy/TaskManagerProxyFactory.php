@@ -29,7 +29,6 @@ final class TaskManagerProxyFactory
         if (null === $proxy) {
             return null;
         }
-
         $participants = new UserIdCollection(array_map(function (TaskManagerParticipantProxy $item) {
             return $this->participantProxyFactory->createEntity($item);
         }, $proxy->getParticipants()->toArray()));
@@ -42,7 +41,7 @@ final class TaskManagerProxyFactory
             new ProjectId($proxy->getProjectId()),
             ProjectStatus::createFromScalar($proxy->getStatus()),
             new Owner(
-                new UserId($proxy->getOwnerId())
+                $proxy->getOwnerId()
             ),
             DateTime::createFromPhpDateTime($proxy->getFinishDate()),
             new Participants($participants),

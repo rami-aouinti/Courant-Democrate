@@ -31,11 +31,11 @@ final class DoctrineTaskManagerRepository implements TaskManagerRepositoryInterf
 
     public function findByProjectId(ProjectId $id): ?TaskManager
     {
+
         /** @var TaskManagerProxy $proxy */
         $proxy = $this->getRepository()->findOneBy([
             'projectId' => $id->value,
         ]);
-
         return $this->managerProxyFactory->createEntity($proxy);
     }
 

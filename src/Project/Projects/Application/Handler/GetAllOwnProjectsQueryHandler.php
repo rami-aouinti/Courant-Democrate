@@ -14,12 +14,12 @@ use App\Project\Projects\Application\Query\GetAllOwnProjectsQuery;
 use App\Project\Projects\Application\Query\GetAllOwnProjectsQueryResponse;
 use App\Project\Projects\Domain\Repository\ProjectQueryRepositoryInterface;
 
-final class GetAllOwnProjectsQueryHandler implements QueryHandlerInterface
+final readonly class GetAllOwnProjectsQueryHandler implements QueryHandlerInterface
 {
     public function __construct(
-        private readonly ProjectQueryRepositoryInterface $projectRepository,
-        private readonly AuthenticatorServiceInterface $authenticatorService,
-        private readonly PaginationBuilder $paginationBuilder
+        private ProjectQueryRepositoryInterface $projectRepository,
+        private AuthenticatorServiceInterface   $authenticatorService,
+        private PaginationBuilder               $paginationBuilder
     ) {
     }
 

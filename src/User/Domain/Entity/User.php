@@ -45,6 +45,7 @@ use Throwable;
 #[ORM\ChangeTrackingPolicy('DEFERRED_EXPLICIT')]
 #[AssertCollection\UniqueEntity('email')]
 #[AssertCollection\UniqueEntity('username')]
+#[ORM\HasLifecycleCallbacks]
 class User implements EntityInterface, UserInterface, UserGroupAwareInterface
 {
     use Blameable;
@@ -298,6 +299,13 @@ class User implements EntityInterface, UserInterface, UserGroupAwareInterface
         $this->categories = new ArrayCollection();
         $this->participants = new ArrayCollection();
         $this->messages = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
+        $this->educations = new ArrayCollection();
+        $this->skills = new ArrayCollection();
+        $this->languages = new ArrayCollection();
+        $this->hobbies = new ArrayCollection();
+        $this->tools = new ArrayCollection();
+        $this->projects = new ArrayCollection();
     }
 
     public function getId(): string

@@ -15,9 +15,6 @@ class PostCreate extends Post
     #[Assert\NotBlank]
     #[Assert\NotNull]
     protected string $title = '';
-    #[Assert\NotBlank]
-    #[Assert\NotNull]
-    protected string $slug = '';
 
     #[Assert\NotBlank]
     #[Assert\NotNull]

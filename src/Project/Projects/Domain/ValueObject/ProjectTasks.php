@@ -26,12 +26,12 @@ final class ProjectTasks
     /**
      * @throws Exception
      */
-    public function ensureDoesUserHaveTask(UserId $userId): void
+    public function ensureDoesUserHaveTask(string $userId): void
     {
         /** @var ProjectTask $task */
         foreach ($this->tasks as $task) {
-            if ($task->getOwnerId()->isEqual($userId)) {
-                throw new UserHasProjectTaskException($userId->value);
+            if ($task->getOwnerId() === $userId) {
+                throw new UserHasProjectTaskException($userId);
             }
         }
     }

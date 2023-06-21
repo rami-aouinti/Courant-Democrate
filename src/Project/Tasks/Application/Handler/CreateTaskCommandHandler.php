@@ -38,13 +38,12 @@ final class CreateTaskCommandHandler implements CommandHandlerInterface
             throw new TaskManagerNotExistException();
         }
         $userId = null !== $command->ownerId
-            ? new UserId($command->ownerId)
+            ? $command->ownerId
             : $this->authenticator->getAuthUser()->getId();
-        $user = $this->userRepository->findById($userId->value);
+        $user = $this->userRepository->findById($userId);
         if (null === $user) {
-            throw new UserNotExistException($userId->value);
+            throw new UserNotExistException($userId);
         }
-
         $manager->createTask(
             new TaskId($command->id),
             new TaskInformation(

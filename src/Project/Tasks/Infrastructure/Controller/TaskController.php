@@ -23,6 +23,7 @@ use App\Project\Shared\Application\Service\PaginationResponseFormatterInterface;
 use App\Project\Shared\Application\Service\UuidGeneratorInterface;
 use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,7 +36,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @package App\Project
  */
 #[AsController]
-#[Route('/tasks', name: 'task.')]
+#[Route('/v1/tasks', name: 'task.')]
 final class TaskController
 {
     public function __construct(
@@ -47,8 +48,12 @@ final class TaskController
     }
 
     #[Route('/in-project/{projectId}/', name: 'createInProject', methods: ['POST'])]
-    public function createInProject(string $projectId, TaskCreateDTO $dto): JsonResponse
+    public function createInProject(string $projectId, TaskCreateDTO $dto, Request $request): JsonResponse
     {
+        $now = new \DateTime('now');
+        $tomorrow = new \DateTime('tomorrow');
+
+        $dto = new TaskCreateDTO('Task 1', 'Brief 1', 'Description 1', $now->format('y-m-d'), $tomorrow->format('y-m-d'));
         $command = $dto->createCommand($this->uuidGenerator->generate(), $projectId);
         $this->commandBus->dispatch($command);
 

@@ -97,6 +97,18 @@ doctrine:
                         dir: '%kernel.project_dir%/src/Article/Domain/Entity'
                         prefix: 'App\Article\Domain\Entity'
                         alias: Article
+                    Notification:
+                        is_bundle: false
+                        type: attribute
+                        dir: '%kernel.project_dir%/src/Notification/Domain/Entity'
+                        prefix: 'App\Notification\Domain\Entity'
+                        alias: Notification
+                    Resume:
+                        is_bundle: false
+                        type: attribute
+                        dir: '%kernel.project_dir%/src/Resume/Domain/Entity'
+                        prefix: 'App\Resume\Domain\Entity'
+                        alias: Resume
                     Event:
                         is_bundle: false
                         type: attribute

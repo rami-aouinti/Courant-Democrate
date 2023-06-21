@@ -12,27 +12,27 @@ use App\Project\Shared\Domain\ValueObject\Users\UserId;
 final class Owner implements Hashable
 {
     public function __construct(
-        public readonly UserId $userId
+        public readonly string $userId
     ) {
     }
 
-    public function ensureIsOwner(UserId $userId): void
+    public function ensureIsOwner(string $userId): void
     {
         if (!$this->isOwner($userId)) {
-            throw new UserIsNotOwnerException($userId->value);
+            throw new UserIsNotOwnerException($userId);
         }
     }
 
-    public function ensureIsNotOwner(UserId $userId): void
+    public function ensureIsNotOwner(string $userId): void
     {
         if ($this->isOwner($userId)) {
-            throw new UserIsAlreadyOwnerException($userId->value);
+            throw new UserIsAlreadyOwnerException($userId);
         }
     }
 
-    public function isOwner(UserId $userId): bool
+    public function isOwner(string $userId): bool
     {
-        return $this->userId->isEqual($userId);
+        return ($this->userId === $userId);
     }
 
     public function getHash(): string
@@ -46,6 +46,6 @@ final class Owner implements Hashable
             return false;
         }
 
-        return $this->userId->isEqual($other->userId);
+        return $this->userId === $other->userId;
     }
 }

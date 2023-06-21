@@ -6,8 +6,6 @@ namespace App\Article\Application\Service;
 
 use App\Article\Domain\Entity\Post;
 use App\Article\Infrastructure\Repository\PostRepository;
-use App\Tool\Domain\Entity\Health;
-use App\Tool\Domain\Repository\Interfaces\HealthRepositoryInterface;
 use Throwable;
 
 /**

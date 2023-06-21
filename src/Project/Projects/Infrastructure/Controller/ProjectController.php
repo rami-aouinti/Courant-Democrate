@@ -37,7 +37,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * @package App\Project
  */
 #[AsController]
-#[Route('/projects', name: 'project.')]
+#[Route('/v1/projects', name: 'project.')]
 final readonly class ProjectController
 {
     public function __construct(
@@ -48,9 +48,12 @@ final readonly class ProjectController
     ) {
     }
 
-    #[Route('/', name: 'create', methods: ['POST'])]
+    #[Route('/create', name: 'create', methods: ['POST'])]
     public function create(ProjectCreateDTO $dto): JsonResponse
     {
+        $now = new \DateTime('now');
+
+        $dto = new ProjectCreateDTO('test', 'testtt', $now->format('Y-m-d'));
         $command = $dto->createCommand($this->uuidGenerator->generate());
         $this->commandBus->dispatch($command);
 

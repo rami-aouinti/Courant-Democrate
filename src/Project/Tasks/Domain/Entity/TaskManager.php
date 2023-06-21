@@ -42,8 +42,8 @@ final class TaskManager extends AggregateRoot
     public function createTask(
         TaskId $id,
         TaskInformation $information,
-        UserId $ownerId,
-        UserId $currentUserId
+        string $ownerId,
+        string $currentUserId
     ): Task {
         $this->status->ensureAllowsModification();
 
@@ -58,7 +58,7 @@ final class TaskManager extends AggregateRoot
 
         $this->ensureCanChangeTask($task->getOwnerId(), $currentUserId);
         if (!$this->owner->isOwner($ownerId) && !$this->participants->isParticipant($ownerId)) {
-            throw new TaskUserNotExistException($ownerId->value);
+            throw new TaskUserNotExistException($ownerId);
         }
 
         $this->tasks = $this->tasks->add($task);
@@ -73,7 +73,7 @@ final class TaskManager extends AggregateRoot
             $information->description->value,
             $information->startDate->getValue(),
             $information->finishDate->getValue(),
-            $ownerId->value,
+            $ownerId,
             (string) $status->getScalar()
         ));
 
@@ -83,7 +83,7 @@ final class TaskManager extends AggregateRoot
     public function changeTaskInformation(
         TaskId $taskId,
         TaskInformation $information,
-        UserId $currentUserId
+        string $currentUserId
     ): void {
         $this->status->ensureAllowsModification();
         $this->tasks->ensureTaskExists($taskId);
@@ -107,7 +107,7 @@ final class TaskManager extends AggregateRoot
         ));
     }
 
-    public function changeTaskStatus(TaskId $taskId, TaskStatus $status, UserId $currentUserId): void
+    public function changeTaskStatus(TaskId $taskId, TaskStatus $status, string $currentUserId): void
     {
         $this->status->ensureAllowsModification();
         $this->tasks->ensureTaskExists($taskId);
@@ -128,7 +128,7 @@ final class TaskManager extends AggregateRoot
     public function createTaskLink(
         TaskId $fromTaskId,
         TaskId $toTaskId,
-        UserId $currentUserId
+        string $currentUserId
     ): void {
         $this->status->ensureAllowsModification();
         $this->tasks->ensureTaskExists($fromTaskId);
@@ -158,7 +158,7 @@ final class TaskManager extends AggregateRoot
     public function deleteTaskLink(
         TaskId $fromTaskId,
         TaskId $toTaskId,
-        UserId $currentUserId
+        string $currentUserId
     ): void {
         $this->status->ensureAllowsModification();
         $this->tasks->ensureTaskExists($fromTaskId);
@@ -236,12 +236,12 @@ final class TaskManager extends AggregateRoot
         $this->owner = $owner;
     }
 
-    public function removeParticipant(UserId $participantId): void
+    public function removeParticipant(string $participantId): void
     {
         $this->participants = $this->participants->remove($participantId);
     }
 
-    public function addParticipant(UserId $participantId): void
+    public function addParticipant(string $participantId): void
     {
         $this->participants = $this->participants->add($participantId);
     }
@@ -255,9 +255,9 @@ final class TaskManager extends AggregateRoot
         $this->finishDate = $date;
     }
 
-    private function ensureCanChangeTask(UserId $taskOwnerId, UserId $currentUserId): void
+    private function ensureCanChangeTask(string $taskOwnerId, string $currentUserId): void
     {
-        if (!$this->owner->isOwner($currentUserId) && !$taskOwnerId->isEqual($currentUserId)) {
+        if (!($this->owner == $currentUserId) && !($taskOwnerId == $currentUserId)) {
             throw new InsufficientPermissionsToChangeTaskException();
         }
     }

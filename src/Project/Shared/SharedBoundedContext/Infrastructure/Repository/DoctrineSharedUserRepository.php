@@ -18,7 +18,8 @@ final class DoctrineSharedUserRepository implements SharedUserRepositoryInterfac
     }
 
     /**
-     * @throws Exception
+     * @param string $id
+     * @return SharedUser|null
      */
     public function findById(string $id): ?SharedUser
     {
@@ -28,7 +29,7 @@ final class DoctrineSharedUserRepository implements SharedUserRepositoryInterfac
     }
 
     /**
-     * @throws Exception
+     * @param SharedUser $user
      */
     public function save(SharedUser $user): void
     {

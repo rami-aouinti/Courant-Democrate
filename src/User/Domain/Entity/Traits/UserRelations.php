@@ -11,6 +11,7 @@ use App\Event\Domain\Entity\Event;
 use App\Log\Domain\Entity\LogLogin;
 use App\Log\Domain\Entity\LogLoginFailure;
 use App\Log\Domain\Entity\LogRequest;
+use App\Notification\Domain\Entity\Notification;
 use App\Quiz\Domain\Entity\Category;
 use App\Quiz\Domain\Entity\Group;
 use App\Quiz\Domain\Entity\Language;
@@ -18,6 +19,12 @@ use App\Quiz\Domain\Entity\Question;
 use App\Quiz\Domain\Entity\Quiz;
 use App\Quiz\Domain\Entity\Score;
 use App\Quiz\Domain\Entity\Workout;
+use App\Resume\Domain\Entity\Education;
+use App\Resume\Domain\Entity\Hobby;
+use App\Resume\Domain\Entity\Profile;
+use App\Resume\Domain\Entity\Project;
+use App\Resume\Domain\Entity\Skill;
+use App\Resume\Domain\Entity\Tool;
 use App\Setting\Domain\Entity\Component;
 use App\Setting\Domain\Entity\Menu;
 use App\Setting\Domain\Entity\Setting;
@@ -106,6 +113,63 @@ trait UserRelations
         User::SET_USER_PROFILE,
     ])]
     protected Collection | ArrayCollection $posts;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Notification::class, orphanRemoval: true)]
+    #[Groups([
+        'User.notifications',
+        User::SET_USER_PROFILE,
+    ])]
+    protected Collection | ArrayCollection $notifications;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Education::class, orphanRemoval: true)]
+    #[Groups([
+        'User.educations',
+        User::SET_USER_PROFILE,
+    ])]
+    protected Collection | ArrayCollection $educations;
+
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Skill::class, orphanRemoval: true)]
+    #[Groups([
+        'User.skills',
+        User::SET_USER_PROFILE,
+    ])]
+    protected Collection | ArrayCollection $skills;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: \App\Resume\Domain\Entity\Language::class, orphanRemoval: true)]
+    #[Groups([
+        'User.languages',
+        User::SET_USER_PROFILE,
+    ])]
+    protected Collection | ArrayCollection $languages;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Hobby::class, orphanRemoval: true)]
+    #[Groups([
+        'User.hobbies',
+        User::SET_USER_PROFILE,
+    ])]
+    protected Collection | ArrayCollection $hobbies;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Tool::class, orphanRemoval: true)]
+    #[Groups([
+        'User.tools',
+        User::SET_USER_PROFILE,
+    ])]
+    protected Collection | ArrayCollection $tools;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Project::class, orphanRemoval: true)]
+    #[Groups([
+        'User.projects',
+        User::SET_USER_PROFILE,
+    ])]
+    protected Collection | ArrayCollection $projects;
+
+    #[OneToOne(mappedBy: 'user', targetEntity: Profile::class)]
+    #[Groups([
+        'User.profile',
+        User::SET_USER_PROFILE,
+    ])]
+    protected Profile|null $profile;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Event::class, orphanRemoval: true)]
     #[Groups([
@@ -606,5 +670,147 @@ trait UserRelations
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notifications): self
+    {
+        if (!$this->notifications->contains($notifications)) {
+            $this->notifications[] = $notifications;
+            $notifications->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notifications): self
+    {
+        if ($this->notifications->removeElement($notifications)) {
+            // set the owning side to null (unless already changed)
+            if ($notifications->getUser() === $this) {
+                $notifications->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection|Collection
+     */
+    public function getEducations(): ArrayCollection|Collection
+    {
+        return $this->educations;
+    }
+
+    /**
+     * @param ArrayCollection|Collection $educations
+     */
+    public function setEducations(ArrayCollection|Collection $educations): void
+    {
+        $this->educations = $educations;
+    }
+
+    /**
+     * @return ArrayCollection|Collection
+     */
+    public function getSkills(): ArrayCollection|Collection
+    {
+        return $this->skills;
+    }
+
+    /**
+     * @param ArrayCollection|Collection $skills
+     */
+    public function setSkills(ArrayCollection|Collection $skills): void
+    {
+        $this->skills = $skills;
+    }
+
+    /**
+     * @return ArrayCollection|Collection
+     */
+    public function getLanguages(): ArrayCollection|Collection
+    {
+        return $this->languages;
+    }
+
+    /**
+     * @param ArrayCollection|Collection $languages
+     */
+    public function setLanguages(ArrayCollection|Collection $languages): void
+    {
+        $this->languages = $languages;
+    }
+
+    /**
+     * @return ArrayCollection|Collection
+     */
+    public function getHobbies(): ArrayCollection|Collection
+    {
+        return $this->hobbies;
+    }
+
+    /**
+     * @param ArrayCollection|Collection $hobbies
+     */
+    public function setHobbies(ArrayCollection|Collection $hobbies): void
+    {
+        $this->hobbies = $hobbies;
+    }
+
+    /**
+     * @return ArrayCollection|Collection
+     */
+    public function getTools(): ArrayCollection|Collection
+    {
+        return $this->tools;
+    }
+
+    /**
+     * @param ArrayCollection|Collection $tools
+     */
+    public function setTools(ArrayCollection|Collection $tools): void
+    {
+        $this->tools = $tools;
+    }
+
+    /**
+     * @return Profile|null
+     */
+    public function getProfile(): ?Profile
+    {
+        return $this->profile;
+    }
+
+    /**
+     * @param Profile|null $profile
+     */
+    public function setProfile(?Profile $profile): void
+    {
+        $this->profile = $profile;
+    }
+
+    /**
+     * @return ArrayCollection|Collection
+     */
+    public function getProjects(): ArrayCollection|Collection
+    {
+        return $this->projects;
+    }
+
+    /**
+     * @param ArrayCollection|Collection $projects
+     */
+    public function setProjects(ArrayCollection|Collection $projects): void
+    {
+        $this->projects = $projects;
     }
 }

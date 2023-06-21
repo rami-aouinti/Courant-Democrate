@@ -34,6 +34,7 @@
 		"php": "^8.2.0",
 		"ext-amqp": "*",
 		"ext-ctype": "*",
+		"ext-curl": "*",
 		"ext-hash": "*",
 		"ext-iconv": "*",
 		"ext-json": "*",
@@ -48,6 +49,7 @@
 		"elasticsearch/elasticsearch": "^7.17",
 		"firebase/php-jwt": "^6.5",
 		"gedmo/doctrine-extensions": "^3.11",
+		"knplabs/knp-snappy-bundle": "^1.9",
 		"lexik/jwt-authentication-bundle": "^2.19",
 		"mark-gerarts/automapper-plus-bundle": "^1.4",
 		"matomo/device-detector": "^6.1",
@@ -88,9 +90,8 @@
 		"symfony/validator": "6.2.*",
 		"symfony/web-link": "6.2.*",
 		"symfony/yaml": "6.2.*",
-		"twig/extra-bundle": "^2.12|^3.0",
-      "ext-curl": "*"
-    },
+		"twig/extra-bundle": "^2.12|^3.0"
+	},
 	"conflict": {
 		"symfony/debug": "<3.3",
 		"symfony/symfony": "*",

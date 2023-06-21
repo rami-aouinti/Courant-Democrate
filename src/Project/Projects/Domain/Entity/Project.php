@@ -32,13 +32,13 @@ use Exception;
 final class Project extends AggregateRoot
 {
     public function __construct(
-        private ProjectId $id,
+        private readonly ProjectId $id,
         private ProjectInformation $information,
-        private ProjectStatus $status,
-        private Owner $owner,
-        private Participants $participants,
-        private ProjectTasks $tasks,
-        private Requests $requests
+        private ProjectStatus      $status,
+        private Owner              $owner,
+        private Participants       $participants,
+        private ProjectTasks       $tasks,
+        private Requests           $requests
     ) {
     }
 
@@ -64,7 +64,7 @@ final class Project extends AggregateRoot
             $information->description->value,
             $information->finishDate->getValue(),
             (string) $status->getScalar(),
-            $owner->userId->value
+            $owner->userId
         ));
 
         return $project;
@@ -72,7 +72,7 @@ final class Project extends AggregateRoot
 
     public function changeInformation(
         ProjectInformation $information,
-        UserId $currentUserId
+        string $currentUserId
     ): void {
         $this->status->ensureAllowsModification();
         $this->owner->ensureIsOwner($currentUserId);
@@ -87,7 +87,7 @@ final class Project extends AggregateRoot
         ));
     }
 
-    public function changeStatus(ProjectStatus $status, UserId $currentUserId): void
+    public function changeStatus(ProjectStatus $status, string $currentUserId): void
     {
         $this->status->ensureCanBeChangedTo($status);
         $this->owner->ensureIsOwner($currentUserId);
@@ -103,11 +103,11 @@ final class Project extends AggregateRoot
     /**
      * @throws Exception
      */
-    public function removeParticipant(UserId $participantId, UserId $currentUserId): void
+    public function removeParticipant(string $participantId, string $currentUserId): void
     {
         $this->status->ensureAllowsModification();
-        if (!$this->owner->isOwner($currentUserId) && !$participantId->isEqual($currentUserId)) {
-            throw new InsufficientPermissionsToChangeProjectParticipantException($participantId->value, $this->id->value);
+        if (!$this->owner->isOwner($currentUserId) && !($participantId === $currentUserId)) {
+            throw new InsufficientPermissionsToChangeProjectParticipantException($participantId, $this->id->value);
         }
         $this->participants->ensureIsParticipant($participantId);
         $this->tasks->ensureDoesUserHaveTask($participantId);
@@ -116,14 +116,14 @@ final class Project extends AggregateRoot
 
         $this->registerEvent(new ProjectParticipantWasRemovedEvent(
             $this->id->value,
-            $participantId->value
+            $participantId
         ));
     }
 
     /**
      * @throws Exception
      */
-    public function changeOwner(Owner $owner, UserId $currentUserId): void
+    public function changeOwner(Owner $owner, string $currentUserId): void
     {
         $this->status->ensureAllowsModification();
         $this->owner->ensureIsOwner($currentUserId);
@@ -136,13 +136,13 @@ final class Project extends AggregateRoot
 
         $this->registerEvent(new ProjectOwnerWasChangedEvent(
             $this->id->value,
-            $this->owner->userId->value
+            $this->owner->userId
         ));
     }
 
     public function createRequest(
         RequestId $id,
-        UserId $userId,
+        string $userId,
     ): Request {
         $this->status->ensureAllowsModification();
 
@@ -156,7 +156,7 @@ final class Project extends AggregateRoot
         $this->registerEvent(new RequestWasCreatedEvent(
             $this->id->value,
             $request->getId()->value,
-            $userId->value,
+            $userId,
             (string) $request->getStatus()->getScalar(),
             $request->getChangeDate()->getValue()
         ));
@@ -167,7 +167,7 @@ final class Project extends AggregateRoot
     public function changeRequestStatus(
         RequestId $id,
         RequestStatus $status,
-        UserId $currentUserId
+        string $currentUserId
     ): void {
         $this->status->ensureAllowsModification();
         $this->owner->ensureIsOwner($currentUserId);
@@ -184,7 +184,7 @@ final class Project extends AggregateRoot
         $this->registerEvent(new RequestStatusWasChangedEvent(
             $this->id->value,
             $request->getId()->value,
-            $request->getUserId()->value,
+            $request->getUserId(),
             (string) $request->getStatus()->getScalar(),
             $request->getChangeDate()->getValue()
         ));
@@ -231,18 +231,18 @@ final class Project extends AggregateRoot
         return $this->requests;
     }
 
-    private function ensureIsUserAlreadyInProject(UserId $userId): void
+    private function ensureIsUserAlreadyInProject(string $userId): void
     {
         $this->participants->ensureIsNotParticipant($userId);
         $this->owner->ensureIsNotOwner($userId);
     }
 
-    private function addParticipant(UserId $participantId): void
+    private function addParticipant(string $participantId): void
     {
         $this->participants = $this->participants->add($participantId);
         $this->registerEvent(new ProjectParticipantWasAddedEvent(
             $this->id->value,
-            $participantId->value
+            $participantId
         ));
     }
 }

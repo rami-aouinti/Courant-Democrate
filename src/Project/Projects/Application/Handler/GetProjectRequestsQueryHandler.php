@@ -32,7 +32,7 @@ final class GetProjectRequestsQueryHandler implements QueryHandlerInterface
 
         $criteria = new Criteria([
             new ExpressionOperand('projectId', '=', $query->projectId),
-            new ExpressionOperand('projectOwnerId', '=', $userId->value),
+            new ExpressionOperand('projectOwnerId', '=', $userId),
         ]);
 
         $result = $this->paginationBuilder->build($this->repository, $criteria, $query->criteria);

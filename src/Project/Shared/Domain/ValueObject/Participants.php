@@ -22,26 +22,26 @@ final class Participants
         }
     }
 
-    public function ensureIsParticipant(UserId $userId): void
+    public function ensureIsParticipant(string $userId): void
     {
         if (!$this->isParticipant($userId)) {
-            throw new ProjectParticipantNotExistException($userId->value);
+            throw new ProjectParticipantNotExistException($userId);
         }
     }
 
-    public function ensureIsNotParticipant(UserId $userId): void
+    public function ensureIsNotParticipant(string $userId): void
     {
         if ($this->isParticipant($userId)) {
-            throw new UserIsAlreadyParticipantException($userId->value);
+            throw new UserIsAlreadyParticipantException($userId);
         }
     }
 
-    public function isParticipant(UserId $userId): bool
+    public function isParticipant(string $userId): bool
     {
         return $this->participants->exists($userId);
     }
 
-    public function add(UserId $userId): self
+    public function add(string $userId): self
     {
         $result = new self();
         $result->participants = $this->participants->add($userId);
@@ -49,7 +49,7 @@ final class Participants
         return $result;
     }
 
-    public function remove(UserId $userId): self
+    public function remove(string $userId): self
     {
         $result = new self();
         $result->participants = $this->participants->remove($userId);

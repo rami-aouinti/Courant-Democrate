@@ -15,13 +15,13 @@ final class Request implements Hashable
 {
     public function __construct(
         private RequestId $id,
-        private UserId $userId,
+        private string $userId,
         private RequestStatus $status,
         private DateTime $changeDate
     ) {
     }
 
-    public static function create(RequestId $id, UserId $userId): self
+    public static function create(RequestId $id, string $userId): self
     {
         $status = new PendingRequestStatus();
         $changeDate = new DateTime();
@@ -41,7 +41,7 @@ final class Request implements Hashable
         return $this->id;
     }
 
-    public function getUserId(): UserId
+    public function getUserId(): string
     {
         return $this->userId;
     }
@@ -68,7 +68,7 @@ final class Request implements Hashable
         }
 
         return $this->id->isEqual($other->id) &&
-            $this->userId->isEqual($other->userId) &&
+            ($this->userId === $other->userId) &&
             $this->status->isEqual($other->status) &&
             $this->changeDate->isEqual($other->changeDate);
     }

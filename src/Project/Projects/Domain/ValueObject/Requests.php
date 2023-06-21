@@ -24,12 +24,12 @@ final class Requests
         }
     }
 
-    public function ensureUserDoesNotHavePendingRequest(UserId $userId, ProjectId $projectId): void
+    public function ensureUserDoesNotHavePendingRequest(string $userId, ProjectId $projectId): void
     {
         /** @var Request $request */
         foreach ($this->requests as $request) {
-            if ($request->isPending() && $request->getUserId()->isEqual($userId)) {
-                throw new UserAlreadyHasPendingRequestException($userId->value, $projectId->value);
+            if ($request->isPending() && ($request->getUserId()===$userId)) {
+                throw new UserAlreadyHasPendingRequestException($userId, $projectId->value);
             }
         }
     }

@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace App\Resume\Transport\Controller\Api\v1\Resume;
 
-use App\General\Domain\Utils\JSON;
-use App\Resume\Transport\Controller\Api\v1\Resume\Knp\Snappy\Pdf;
+use App\Pdf\Application\Service\PdfService;
 use App\Role\Application\Security\RolesService;
 use App\User\Domain\Entity\User;
-use JsonException;
+use Dompdf\Dompdf;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Annotations as OA;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use setasign\Fpdi\Tcpdf\Fpdi;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
 /**
@@ -29,17 +30,8 @@ use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
  * @package App\Resume
  */
 #[AsController]
-readonly class IndexController
+class IndexController extends AbstractController
 {
-    /**
-     * @param SerializerInterface $serializer
-     * @param RolesService $rolesService
-     */
-    public function __construct(
-        private SerializerInterface $serializer,
-        private RolesService        $rolesService,
-    ) {
-    }
 
     /**
      * Get current user profile data, accessible only for 'IS_AUTHENTICATED_FULLY' users.
@@ -66,23 +58,30 @@ readonly class IndexController
      * )
      *
      * @param User $loggedInUser
-     * @param \Knp\Snappy\Pdf $knpSnappyPdf
-     * @return PdfResponse
      */
     #[Route(
         path: '/v1/resume',
         methods: [Request::METHOD_GET],
     )]
     #[IsGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)]
-    public function __invoke(User $loggedInUser, \Knp\Snappy\Pdf $knpSnappyPdf): PdfResponse
+    public function __invoke(User $loggedInUser, PdfService $pdfService): Response
     {
-        $knpSnappyPdf->generate(array('https://www.google.fr', 'https://www.knplabs.com', 'https://www.google.com'), 'file.pdf');
+        $data = [];
+        $data['name'] = 'test';
+        $data['path'] = "pdf/test.pdf";
+        $pdfService->createDocument($loggedInUser, $data);
 
-        print_r($knpSnappyPdf);
-        return new PdfResponse(
-            $knpSnappyPdf,
-            'file.pdf'
+        /** @var Dompdf $dompdf */
+        return new Response (
+            "Success",
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/pdf']
         );
+    }
 
+    private function imageToBase64($path) {
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $data = file_get_contents($path);
+        return 'data:image/' . $type . ';base64,' . base64_encode($data);
     }
 }

@@ -68,6 +68,15 @@ notification-controllers:
     defaults:
         _format: json
 
+office-controllers:
+    resource:
+        path: ../src/Politic/Transport/Controller/Api/
+        namespace: App\Politic\Transport\Controller\Api
+    type: attribute
+    prefix: /api
+    defaults:
+        _format: json
+
 resume-controllers:
     resource:
         path: ../src/Resume/Transport/Controller/Api/

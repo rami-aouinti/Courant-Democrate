@@ -109,6 +109,18 @@ doctrine:
                         dir: '%kernel.project_dir%/src/Resume/Domain/Entity'
                         prefix: 'App\Resume\Domain\Entity'
                         alias: Resume
+                    Politic:
+                        is_bundle: false
+                        type: attribute
+                        dir: '%kernel.project_dir%/src/Politic/Domain/Entity'
+                        prefix: 'App\Politic\Domain\Entity'
+                        alias: Politic
+                    Pdf:
+                        is_bundle: false
+                        type: attribute
+                        dir: '%kernel.project_dir%/src/Pdf/Domain/Entity'
+                        prefix: 'App\Pdf\Domain\Entity'
+                        alias: Pdf
                     Event:
                         is_bundle: false
                         type: attribute

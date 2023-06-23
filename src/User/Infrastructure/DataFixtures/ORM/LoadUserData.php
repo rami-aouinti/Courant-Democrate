@@ -10,6 +10,7 @@ use App\Article\Domain\Entity\Tag;
 use App\Event\Domain\Entity\Event;
 use App\General\Domain\Enum\Locale;
 use App\General\Domain\Rest\UuidHelper;
+use App\Politic\Domain\Entity\Office;
 use App\Role\Application\Security\Interfaces\RolesServiceInterface;
 use App\Setting\Domain\Entity\Component;
 use App\Setting\Domain\Entity\Menu;
@@ -155,6 +156,16 @@ final class LoadUserData extends Fixture implements OrderedFixtureInterface
             $event->setUser($entity);
             $manager->persist($event);
             $entity->addEvent($event);
+        }
+
+
+        for($l = 0; $l < 10; $l++) {
+            $office = new Office();
+            $office->setOfficeName('Office ' . $l);
+            $office->setOfficeDescription('Office Description ' . $l);
+            $office->setActive(true);
+            $office->addUser($entity);
+            $manager->persist($office);
         }
 
         // Persist entity
